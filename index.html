@@ -1,0 +1,4261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#6366f1" />
+
+<!-- ================= SEO ================= -->
+<title>ArunaLink - Upload & Share Files</title>
+<meta name="description" content="ArunaLink — Upload anything. Share anywhere. Free public file hosting for images, video, audio, documents and archives with instant shareable links." />
+<meta name="keywords" content="file hosting, image upload, file uploader, free file sharing, arunalink, direct link, public url" />
+<meta name="author" content="ArunaLink" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://arunalink.vercel.app/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="ArunaLink" />
+<meta property="og:title" content="ArunaLink - Upload & Share Files" />
+<meta property="og:description" content="Upload anything. Share anywhere. Instant public links for images, video, audio, documents and archives." />
+<meta property="og:url" content="https://arunalink.vercel.app/" />
+<meta property="og:image" content="https://arunalink.vercel.app/og-image.png" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ArunaLink - Upload & Share Files" />
+<meta name="twitter:description" content="Upload anything. Share anywhere. Instant public links for any file type." />
+<meta name="twitter:image" content="https://arunalink.vercel.app/og-image.png" />
+
+<!-- Favicon (inline SVG, no external file needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236366f1'/%3E%3Cpath d='M50 20 L72 46 H60 V72 H40 V46 H28 Z' fill='white'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236366f1'/%3E%3Cpath d='M50 20 L72 46 H60 V72 H40 V46 H28 Z' fill='white'/%3E%3C/svg%3E" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+            400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+            800: '#3730a3', 900: '#312e81', 950: '#1e1b4b'
+          },
+          ink: {
+            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
+            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
+            800: '#1e293b', 900: '#0f172a', 950: '#070b18'
+          }
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+          display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+<!-- QRCode generator -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+<style>
+  /* ============================================================
+     THEME TOKENS
+     ============================================================ */
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --surface-3: #e2e8f0;
+    --border: rgba(15, 23, 42, 0.09);
+    --border-strong: rgba(15, 23, 42, 0.16);
+    --text: #0f172a;
+    --muted: #64748b;
+    --brand: #6366f1;
+    --brand-soft: rgba(99, 102, 241, 0.10);
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.12);
+  }
+  html.dark {
+    --bg: #070b18;
+    --surface: #0f1524;
+    --surface-2: #161d2f;
+    --surface-3: #1e273c;
+    --border: rgba(148, 163, 184, 0.14);
+    --border-strong: rgba(148, 163, 184, 0.26);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --brand: #818cf8;
+    --brand-soft: rgba(129, 140, 248, 0.14);
+    --success: #34d399;
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -16px rgba(0,0,0,.7);
+  }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  * { -webkit-tap-highlight-color: transparent; }
+  html, body { max-width: 100%; overflow-x: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    transition: background-color .35s ease, color .35s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+
+  ::selection { background: rgba(99,102,241,.28); }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 999px; border: 2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  /* ============================================================
+     SURFACES
+     ============================================================ */
+  .surface {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .surface-2 { background: var(--surface-2); border: 1px solid var(--border); }
+  .soft-border { border-color: var(--border); }
+  .text-muted { color: var(--muted); }
+
+  .gradient-text {
+    background: linear-gradient(100deg, #6366f1 0%, #8b5cf6 40%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  html.dark .gradient-text {
+    background: linear-gradient(100deg, #a5b4fc 0%, #c4b5fd 40%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .mesh-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 30rem at 12% -8%, rgba(99,102,241,.20), transparent 60%),
+      radial-gradient(48rem 26rem at 92% 4%, rgba(6,182,212,.16), transparent 62%),
+      radial-gradient(42rem 24rem at 50% 108%, rgba(139,92,246,.14), transparent 62%);
+  }
+  html.dark .mesh-bg {
+    background:
+      radial-gradient(60rem 30rem at 12% -8%, rgba(99,102,241,.24), transparent 60%),
+      radial-gradient(48rem 26rem at 92% 4%, rgba(6,182,212,.14), transparent 62%),
+      radial-gradient(42rem 24rem at 50% 108%, rgba(139,92,246,.18), transparent 62%);
+  }
+
+  /* ============================================================
+     ANIMATIONS
+     ============================================================ */
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-14px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes popIn { 0% { opacity:0; transform: scale(.86) } 60% { transform: scale(1.04) } 100% { opacity:1; transform: scale(1) } }
+  @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+  @keyframes shimmer { 0% { background-position: -420px 0 } 100% { background-position: 420px 0 } }
+  @keyframes spinSlow { to { transform: rotate(360deg) } }
+  @keyframes pulseRing { 0% { transform: scale(.85); opacity: .7 } 70% { transform: scale(1.5); opacity: 0 } 100% { opacity: 0 } }
+  @keyframes checkPop { 0% { transform: scale(0) rotate(-30deg); opacity: 0 } 55% { transform: scale(1.15) rotate(4deg); opacity: 1 } 100% { transform: scale(1) rotate(0); opacity: 1 } }
+  @keyframes barberpole { from { background-position: 0 0 } to { background-position: 40px 0 } }
+  @keyframes dropBounce { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(14px) scale(.96) } to { opacity: 1; transform: translateY(0) scale(1) } }
+  @keyframes toastOut { to { opacity: 0; transform: translateY(10px) scale(.96) } }
+  @keyframes gradientShift { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
+  @keyframes countGlow { 0% { text-shadow: 0 0 0 rgba(99,102,241,0) } 50% { text-shadow: 0 0 18px rgba(99,102,241,.55) } 100% { text-shadow: 0 0 0 rgba(99,102,241,0) } }
+
+  .anim-fade { animation: fadeIn .5s ease both; }
+  .anim-up { animation: slideUp .6s cubic-bezier(.22,1,.36,1) both; }
+  .anim-down { animation: slideDown .35s cubic-bezier(.22,1,.36,1) both; }
+  .anim-pop { animation: popIn .45s cubic-bezier(.22,1,.36,1) both; }
+  .anim-float { animation: floaty 4.5s ease-in-out infinite; }
+  .anim-drop-bounce { animation: dropBounce .6s ease-in-out infinite; }
+  .anim-check { animation: checkPop .6s cubic-bezier(.22,1,.36,1) both; }
+  .anim-glow { animation: countGlow 1.2s ease both; }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+    background-size: 420px 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+
+  /* ============================================================
+     DROPZONE
+     ============================================================ */
+  .dropzone {
+    position: relative;
+    border: 2px dashed var(--border-strong);
+    border-radius: 1.25rem;
+    background: var(--surface);
+    transition: border-color .25s ease, background-color .25s ease, transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease;
+  }
+  .dropzone:hover { border-color: var(--brand); }
+  .dropzone.is-drag {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+    transform: scale(1.012);
+    box-shadow: 0 0 0 6px rgba(99,102,241,.10), 0 18px 40px -20px rgba(99,102,241,.6);
+  }
+  .dropzone.is-drag .dz-icon { animation: dropBounce .6s ease-in-out infinite; }
+  .dropzone.is-drag .dz-ring { animation: pulseRing 1.2s ease-out infinite; }
+  .dz-ring {
+    position: absolute; inset: -2px; border-radius: 1.25rem;
+    border: 2px solid var(--brand); opacity: 0; pointer-events: none;
+  }
+
+  /* ============================================================
+     QUEUE ITEM
+     ============================================================ */
+  .upload-item {
+    display: flex; gap: .875rem; align-items: flex-start;
+    padding: .875rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    animation: slideUp .4s cubic-bezier(.22,1,.36,1) both;
+  }
+  .upload-item:hover { border-color: var(--border-strong); box-shadow: 0 8px 24px -18px rgba(15,23,42,.5); }
+  .upload-item[data-status="completed"] { border-color: rgba(16,185,129,.35); }
+  .upload-item[data-status="failed"] { border-color: rgba(239,68,68,.35); }
+
+  .ui-icon {
+    width: 42px; height: 42px; flex: 0 0 42px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: .75rem;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .ui-icon svg { width: 20px; height: 20px; }
+
+  .ui-name {
+    font-size: .875rem; font-weight: 600; line-height: 1.3;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    max-width: 100%;
+  }
+  .ui-meta { font-size: .75rem; color: var(--muted); display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; margin-top: 2px; }
+
+  .ui-status { font-weight: 600; }
+  .ui-status[data-s="queued"] { color: var(--muted); }
+  .ui-status[data-s="preparing"] { color: var(--warning); }
+  .ui-status[data-s="uploading"] { color: var(--brand); }
+  .ui-status[data-s="processing"] { color: #8b5cf6; }
+  .ui-status[data-s="completed"] { color: var(--success); }
+  .ui-status[data-s="failed"] { color: var(--danger); }
+  .ui-status[data-s="cancelled"] { color: var(--muted); }
+
+  .ui-progress {
+    height: 6px; border-radius: 999px; background: var(--surface-3);
+    overflow: hidden; margin-top: .55rem;
+  }
+  .ui-bar {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
+    background-size: 200% 100%;
+    transition: width .25s ease;
+    animation: gradientShift 3s ease infinite;
+  }
+  .ui-bar.is-indeterminate {
+    width: 100% !important;
+    background: repeating-linear-gradient(115deg, #6366f1 0 12px, #8b5cf6 12px 24px);
+    background-size: 40px 100%;
+    animation: barberpole .8s linear infinite;
+  }
+  .upload-item[data-status="completed"] .ui-bar { background: linear-gradient(90deg, #10b981, #34d399); animation: none; }
+  .upload-item[data-status="failed"] .ui-bar { background: linear-gradient(90deg, #ef4444, #f87171); animation: none; }
+  .upload-item[data-status="cancelled"] .ui-bar { background: var(--surface-3); animation: none; }
+
+  .ui-stats { font-size: .7rem; color: var(--muted); margin-top: .35rem; display: flex; gap: .75rem; flex-wrap: wrap; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: .625rem;
+    color: var(--muted); background: transparent;
+    border: 1px solid transparent;
+    transition: all .18s ease;
+    cursor: pointer;
+  }
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .icon-btn.danger:hover { color: var(--danger); background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25); }
+  .icon-btn.success:hover { color: var(--success); background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.25); }
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    font-weight: 600; font-size: .875rem;
+    padding: .625rem 1.05rem; border-radius: .75rem;
+    transition: transform .16s cubic-bezier(.22,1,.36,1), box-shadow .2s ease, background-color .2s ease, border-color .2s ease, opacity .2s ease;
+    cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+    user-select: none;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn svg { width: 16px; height: 16px; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(100deg, #6366f1, #8b5cf6 55%, #06b6d4);
+    background-size: 180% 100%;
+    box-shadow: 0 10px 26px -12px rgba(99,102,241,.85);
+  }
+  .btn-primary:hover { background-position: 100% 0; box-shadow: 0 14px 32px -12px rgba(99,102,241,.95); transform: translateY(-1px); }
+
+  .btn-ghost { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+  .btn-ghost:hover { background: var(--surface-3); border-color: var(--border-strong); transform: translateY(-1px); }
+
+  .btn-outline { background: transparent; color: var(--text); border-color: var(--border-strong); }
+  .btn-outline:hover { background: var(--surface-2); transform: translateY(-1px); }
+
+  .btn-danger { background: rgba(239,68,68,.12); color: var(--danger); border-color: rgba(239,68,68,.3); }
+  .btn-danger:hover { background: rgba(239,68,68,.2); }
+
+  .btn-sm { padding: .42rem .75rem; font-size: .78rem; border-radius: .625rem; }
+  .btn-sm svg { width: 14px; height: 14px; }
+
+  /* ============================================================
+     HISTORY CARD
+     ============================================================ */
+  .hist-card {
+    display: flex; gap: .875rem; align-items: center;
+    padding: .8rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+    transition: transform .2s cubic-bezier(.22,1,.36,1), border-color .2s ease, box-shadow .2s ease;
+    animation: slideUp .45s cubic-bezier(.22,1,.36,1) both;
+  }
+  .hist-card:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: 0 14px 30px -22px rgba(15,23,42,.7); }
+  .hist-thumb {
+    width: 48px; height: 48px; flex: 0 0 48px; border-radius: .75rem;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--brand-soft); color: var(--brand); overflow: hidden;
+  }
+  .hist-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .hist-thumb svg { width: 20px; height: 20px; }
+
+  /* ============================================================
+     MODAL
+     ============================================================ */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(2, 6, 23, .62);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    opacity: 0; transition: opacity .28s ease;
+    overflow-y: auto;
+  }
+  .modal-backdrop.is-open { opacity: 1; }
+  .modal-panel {
+    width: 100%; max-height: calc(100dvh - 2rem);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.6);
+    transform: translateY(20px) scale(.97); opacity: 0;
+    transition: transform .32s cubic-bezier(.22,1,.36,1), opacity .32s ease;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .modal-backdrop.is-open .modal-panel { transform: translateY(0) scale(1); opacity: 1; }
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  #toastHost {
+    position: fixed; z-index: 120;
+    right: 1rem; bottom: 1rem;
+    display: flex; flex-direction: column; gap: .625rem;
+    pointer-events: none;
+    max-width: min(92vw, 380px);
+  }
+  @media (max-width: 767px) { #toastHost { bottom: 5.5rem; left: 1rem; right: 1rem; max-width: none; } }
+  .toast {
+    pointer-events: auto;
+    display: flex; align-items: flex-start; gap: .7rem;
+    padding: .8rem .9rem;
+    border-radius: .875rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 18px 40px -18px rgba(0,0,0,.45);
+    animation: toastIn .35s cubic-bezier(.22,1,.36,1) both;
+  }
+  .toast.out { animation: toastOut .25s ease forwards; }
+  .toast-icon { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 1px; }
+  .toast-title { font-size: .82rem; font-weight: 700; line-height: 1.25; }
+  .toast-msg { font-size: .76rem; color: var(--muted); line-height: 1.35; margin-top: 2px; word-break: break-word; }
+
+  /* ============================================================
+     MISC
+     ============================================================ */
+  .stat-card {
+    position: relative; overflow: hidden;
+    border-radius: 1rem; padding: 1rem;
+    background: var(--surface); border: 1px solid var(--border);
+    transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease, box-shadow .25s ease;
+  }
+  .stat-card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: 0 18px 36px -26px rgba(15,23,42,.8); }
+  .stat-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(16rem 8rem at 100% 0%, var(--brand-soft), transparent 70%);
+    pointer-events: none;
+  }
+
+  .nav-link {
+    position: relative; font-size: .875rem; font-weight: 500;
+    color: var(--muted); padding: .4rem .15rem;
+    transition: color .2s ease;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+    border-radius: 2px; background: var(--brand);
+    transform: scaleX(0); transform-origin: center;
+    transition: transform .28s cubic-bezier(.22,1,.36,1);
+  }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  .mobile-nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: .65rem; font-weight: 600;
+    color: var(--muted); flex: 1; padding: .45rem 0;
+    transition: color .2s ease;
+  }
+  .mobile-nav-item svg { width: 20px; height: 20px; }
+  .mobile-nav-item.active, .mobile-nav-item:hover { color: var(--brand); }
+
+  .copy-field {
+    display: flex; align-items: center; gap: .5rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: .75rem;
+    padding: .5rem .6rem;
+    transition: border-color .2s ease;
+  }
+  .copy-field:focus-within { border-color: var(--brand); }
+  .copy-field input {
+    flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+    font-size: .78rem; color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .preview-stage {
+    background:
+      linear-gradient(45deg, var(--surface-2) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--surface-2) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--surface-2) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--surface-2) 75%);
+    background-size: 22px 22px;
+    background-position: 0 0, 0 11px, 11px -11px, -11px 0px;
+  }
+
+  .filter-pill {
+    font-size: .75rem; font-weight: 600; padding: .38rem .75rem;
+    border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--muted);
+    transition: all .2s ease; cursor: pointer; white-space: nowrap;
+  }
+  .filter-pill:hover { border-color: var(--border-strong); color: var(--text); }
+  .filter-pill.active {
+    background: linear-gradient(100deg, #6366f1, #8b5cf6);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 8px 20px -12px rgba(99,102,241,.9);
+  }
+
+  .skeleton-row { height: 74px; border-radius: 1rem; }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .anim-float, .anim-drop-bounce { animation: none !important; }
+  }
+
+  /* Prevent body scroll when modal open */
+  body.modal-open { overflow: hidden; }
+</style>
+</head>
+
+<body class="min-h-screen antialiased">
+
+<!-- ============================================================
+     OFFLINE BANNER
+     ============================================================ -->
+<div id="offlineBanner" class="hidden fixed top-0 left-0 right-0 z-[130]">
+  <div class="mx-auto max-w-3xl m-3 rounded-xl border border-amber-400/40 bg-amber-50 dark:bg-amber-950/70 dark:border-amber-500/30 px-4 py-3 flex items-center gap-3 shadow-lg anim-down">
+    <i data-lucide="wifi-off" class="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0"></i>
+    <div class="flex-1 min-w-0">
+      <p class="text-sm font-semibold text-amber-900 dark:text-amber-100">Connection lost</p>
+      <p class="text-xs text-amber-700 dark:text-amber-300">Please check your internet connection.</p>
+    </div>
+    <button id="retryConnectionBtn" class="btn btn-sm btn-outline border-amber-400/50 text-amber-800 dark:text-amber-200">
+      <i data-lucide="refresh-cw"></i> Retry
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<header class="sticky top-0 z-50 border-b soft-border backdrop-blur-xl" style="background: color-mix(in srgb, var(--bg) 82%, transparent);">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+    <div class="flex h-16 items-center justify-between gap-3">
+
+      <!-- Brand -->
+      <a href="#top" class="flex items-center gap-2.5 group shrink-0" aria-label="ArunaLink home">
+        <span class="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 via-violet-500 to-cyan-500 shadow-lg shadow-brand-500/30 transition-transform duration-300 group-hover:scale-105">
+          <i data-lucide="link-2" class="w-[18px] h-[18px] text-white"></i>
+        </span>
+        <span class="font-display text-lg font-extrabold tracking-tight">
+          Aruna<span class="gradient-text">Link</span>
+        </span>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="hidden md:flex items-center gap-7">
+        <a href="#upload" class="nav-link">Upload</a>
+        <a href="#recent" class="nav-link">Recent</a>
+        <a href="#dashboard" class="nav-link">Dashboard</a>
+        <a href="#features" class="nav-link">Features</a>
+      </div>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-1.5">
+        <span id="modeBadge" class="hidden sm:inline-flex items-center gap-1.5 rounded-full border soft-border px-2.5 py-1 text-[11px] font-semibold text-muted">
+          <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+          <span id="modeBadgeText">Checking…</span>
+        </span>
+
+        <button id="soundToggle" class="icon-btn" aria-label="Toggle sound effects" title="Sound effects">
+          <i data-lucide="volume-2"></i>
+        </button>
+
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Theme: system">
+          <i data-lucide="monitor"></i>
+        </button>
+
+        <a href="#upload" class="btn btn-primary btn-sm hidden sm:inline-flex">
+          <i data-lucide="upload-cloud"></i> Upload
+        </a>
+
+        <button id="mobileMenuBtn" class="icon-btn md:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden pb-3">
+      <div class="surface rounded-xl p-2 anim-down">
+        <a href="#upload" class="mobile-menu-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5">
+          <i data-lucide="upload-cloud" class="w-4 h-4 text-brand-500"></i> Upload files
+        </a>
+        <a href="#recent" class="mobile-menu-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5">
+          <i data-lucide="history" class="w-4 h-4 text-brand-500"></i> Recent uploads
+        </a>
+        <a href="#dashboard" class="mobile-menu-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5">
+          <i data-lucide="bar-chart-3" class="w-4 h-4 text-brand-500"></i> Dashboard
+        </a>
+        <a href="#features" class="mobile-menu-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-brand-500"></i> Features
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="relative overflow-hidden pt-14 pb-10 sm:pt-20 sm:pb-14">
+    <div class="mesh-bg"></div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+
+      <div class="inline-flex items-center gap-2 rounded-full border soft-border px-3.5 py-1.5 text-xs font-semibold text-muted anim-up" style="background: var(--surface);">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        </span>
+        Free public file hosting · No account required
+      </div>
+
+      <h1 class="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] anim-up" style="animation-delay:.06s">
+        Upload anything.<br class="sm:hidden" />
+        <span class="gradient-text">Share anywhere.</span>
+      </h1>
+
+      <p class="mx-auto mt-5 max-w-2xl text-base sm:text-lg text-muted leading-relaxed anim-up" style="animation-delay:.12s">
+        ArunaLink turns any file into a fast, shareable public link. Images, video, audio,
+        documents, archives — up to <span id="heroMaxSize" class="font-semibold" style="color:var(--text)">100 MB</span> per file,
+        with instant preview and direct URLs.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3 anim-up" style="animation-delay:.18s">
+        <a href="#upload" class="btn btn-primary px-6 py-3 text-[15px]">
+          <i data-lucide="upload-cloud"></i> Start uploading
+        </a>
+        <a href="#recent" class="btn btn-outline px-6 py-3 text-[15px]">
+          <i data-lucide="history"></i> My uploads
+        </a>
+      </div>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-xs font-medium text-muted anim-up" style="animation-delay:.24s">
+        <span class="inline-flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4 text-brand-500"></i> Instant links</span>
+        <span class="inline-flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-brand-500"></i> Sanitized &amp; validated</span>
+        <span class="inline-flex items-center gap-1.5"><i data-lucide="globe" class="w-4 h-4 text-brand-500"></i> Global CDN ready</span>
+        <span class="inline-flex items-center gap-1.5"><i data-lucide="qr-code" class="w-4 h-4 text-brand-500"></i> QR sharing</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       UPLOAD SECTION
+       ============================================================ -->
+  <section id="upload" class="relative scroll-mt-20 pb-12">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+      <div class="surface rounded-2xl p-3 sm:p-5 reveal">
+
+        <!-- Dropzone -->
+        <div id="dropzone" class="dropzone p-6 sm:p-10 text-center cursor-pointer" tabindex="0"
+             role="button" aria-label="Upload area. Click to browse files or drag and drop files here.">
+          <div class="dz-ring"></div>
+
+          <div class="relative mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 via-violet-500 to-cyan-500 shadow-xl shadow-brand-500/30 dz-icon">
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-white"></i>
+          </div>
+
+          <h2 class="font-display text-lg sm:text-xl font-bold">
+            Drag &amp; drop files here
+          </h2>
+          <p class="mt-1.5 text-sm text-muted">
+            or <span class="font-semibold" style="color:var(--brand)">browse</span> from your device · you can also paste with
+            <kbd class="rounded border soft-border px-1.5 py-0.5 text-[10px] font-mono" style="background:var(--surface-2)">Ctrl</kbd>
+            +
+            <kbd class="rounded border soft-border px-1.5 py-0.5 text-[10px] font-mono" style="background:var(--surface-2)">V</kbd>
+          </p>
+
+          <div class="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+            <button id="browseBtn" type="button" class="btn btn-primary">
+              <i data-lucide="folder-open"></i> Browse files
+            </button>
+            <button id="pasteBtn" type="button" class="btn btn-ghost">
+              <i data-lucide="clipboard-paste"></i> Paste from clipboard
+            </button>
+          </div>
+
+          <p class="mt-4 text-[11px] text-muted" id="dropzoneHint">
+            Max <span id="hintMaxSize">100 MB</span> per file · up to <span id="hintMaxFiles">10</span> files at once
+          </p>
+
+          <input id="fileInput" type="file" multiple class="hidden" aria-hidden="true" />
+        </div>
+
+        <!-- Queue toolbar -->
+        <div id="queueToolbar" class="hidden mt-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <i data-lucide="layers" class="w-4 h-4 text-brand-500 shrink-0"></i>
+              <span class="text-sm font-semibold truncate">
+                <span id="queueCount">0</span> file<span id="queueCountPlural">s</span> in queue
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="inline-flex items-center gap-2 text-xs font-medium text-muted select-none cursor-pointer mr-1">
+                <input id="autoUploadToggle" type="checkbox" class="peer sr-only" checked />
+                <span class="relative h-5 w-9 rounded-full transition-colors" style="background:var(--surface-3)" data-track>
+                  <span class="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform duration-300" data-thumb></span>
+                </span>
+                Auto upload
+              </label>
+
+              <button id="uploadAllBtn" class="btn btn-sm btn-primary hidden">
+                <i data-lucide="upload"></i> Upload all
+              </button>
+              <button id="cancelAllBtn" class="btn btn-sm btn-outline hidden">
+                <i data-lucide="x-circle"></i> Cancel all
+              </button>
+              <button id="clearAllBtn" class="btn btn-sm btn-ghost">
+                <i data-lucide="trash-2"></i> Clear all
+              </button>
+            </div>
+          </div>
+
+          <!-- Overall progress -->
+          <div id="overallWrap" class="mt-4 hidden">
+            <div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+              <span class="text-muted inline-flex items-center gap-1.5">
+                <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i>
+                <span id="overallLabel">Uploading…</span>
+              </span>
+              <span id="overallPct" style="color:var(--brand)">0%</span>
+            </div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3)">
+              <div id="overallBar" class="h-full rounded-full transition-[width] duration-300"
+                   style="width:0%; background:linear-gradient(90deg,#6366f1,#8b5cf6,#06b6d4);"></div>
+            </div>
+            <div class="mt-1.5 flex items-center justify-between text-[11px] text-muted">
+              <span id="overallStats"></span>
+              <span id="overallEta"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- File list -->
+        <div id="fileList" class="mt-4 space-y-2.5" aria-live="polite" aria-label="Upload queue"></div>
+
+        <!-- Queue skeleton (shown briefly while preparing) -->
+        <div id="queueSkeleton" class="hidden mt-4 space-y-2.5">
+          <div class="skeleton skeleton-row"></div>
+          <div class="skeleton skeleton-row"></div>
+        </div>
+
+        <!-- Empty upload state -->
+        <div id="queueEmpty" class="hidden mt-6 flex flex-col items-center justify-center py-8 text-center">
+          <div class="grid h-12 w-12 place-items-center rounded-xl" style="background:var(--surface-2); color:var(--muted)">
+            <i data-lucide="inbox" class="w-6 h-6"></i>
+          </div>
+          <p class="mt-3 text-sm font-semibold">No files in the queue</p>
+          <p class="text-xs text-muted mt-1">Drop something above to get a shareable link.</p>
+        </div>
+      </div>
+
+      <!-- Accepted types strip -->
+      <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 reveal">
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="image" class="w-4 h-4 text-brand-500 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">JPG · PNG · WEBP · GIF · SVG</span>
+        </div>
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="film" class="w-4 h-4 text-violet-500 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">MP4 · WEBM · MOV · MKV</span>
+        </div>
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="music" class="w-4 h-4 text-cyan-500 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">MP3 · WAV · OGG · FLAC</span>
+        </div>
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="file-text" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">PDF · DOCX · XLSX · PPTX</span>
+        </div>
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="archive" class="w-4 h-4 text-amber-500 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">ZIP · RAR · 7Z · TAR · GZ</span>
+        </div>
+        <div class="surface-2 rounded-xl px-3 py-2.5 flex items-center gap-2">
+          <i data-lucide="file" class="w-4 h-4 text-slate-400 shrink-0"></i>
+          <span class="text-[11px] font-semibold truncate">Any other file type</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DASHBOARD / STATS
+       ============================================================ -->
+  <section id="dashboard" class="scroll-mt-20 py-12">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-4 flex-wrap reveal">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">Dashboard</h2>
+          <p class="mt-1.5 text-sm text-muted">Your local upload statistics — stored privately in this browser.</p>
+        </div>
+        <button id="clearHistoryBtnTop" class="btn btn-sm btn-outline">
+          <i data-lucide="trash-2"></i> Clear history
+        </button>
+      </div>
+
+      <div class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Uploads</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="uploads">0</p>
+        </div>
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="files" class="w-4 h-4"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Files</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="files">0</p>
+        </div>
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="hard-drive" class="w-4 h-4"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Storage</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="storage">0 B</p>
+        </div>
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="image" class="w-4 h-4 text-brand-500"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Images</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="images">0</p>
+        </div>
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="film" class="w-4 h-4 text-violet-500"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Videos</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="videos">0</p>
+        </div>
+        <div class="stat-card reveal">
+          <div class="relative flex items-center gap-2 text-muted">
+            <i data-lucide="file-text" class="w-4 h-4 text-emerald-500"></i>
+            <span class="text-[11px] font-bold uppercase tracking-wide">Docs</span>
+          </div>
+          <p class="relative mt-2 font-display text-2xl font-extrabold" data-stat="documents">0</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       RECENT UPLOADS
+       ============================================================ -->
+  <section id="recent" class="scroll-mt-20 py-12">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+      <div class="flex flex-wrap items-end justify-between gap-4 reveal">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">Recent uploads</h2>
+          <p class="mt-1.5 text-sm text-muted">Your upload history is stored locally in this browser only.</p>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="mt-6 surface rounded-2xl p-3 sm:p-4 reveal">
+        <div class="flex flex-col lg:flex-row gap-3">
+          <div class="relative flex-1 min-w-0">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none"></i>
+            <input id="searchInput" type="search" placeholder="Search by file name…  (Ctrl + K)"
+                   class="w-full rounded-xl border soft-border bg-transparent pl-9 pr-9 py-2.5 text-sm outline-none transition-colors focus:border-brand-500"
+                   style="background: var(--surface-2);" aria-label="Search uploads" />
+            <kbd class="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:block rounded border soft-border px-1.5 py-0.5 text-[10px] font-mono text-muted" style="background:var(--surface)">⌘K</kbd>
+          </div>
+
+          <div class="flex gap-2 flex-wrap">
+            <div class="relative">
+              <select id="filterSelect" aria-label="Filter uploads"
+                class="appearance-none rounded-xl border soft-border pl-3 pr-9 py-2.5 text-sm font-medium outline-none cursor-pointer focus:border-brand-500"
+                style="background: var(--surface-2); color: var(--text);">
+                <option value="all">All types</option>
+                <option value="image">Images</option>
+                <option value="video">Videos</option>
+                <option value="audio">Audio</option>
+                <option value="document">Documents</option>
+                <option value="archive">Archives</option>
+                <option value="other">Other</option>
+              </select>
+              <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none"></i>
+            </div>
+
+            <div class="relative">
+              <select id="sortSelect" aria-label="Sort uploads"
+                class="appearance-none rounded-xl border soft-border pl-3 pr-9 py-2.5 text-sm font-medium outline-none cursor-pointer focus:border-brand-500"
+                style="background: var(--surface-2); color: var(--text);">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="name-asc">Name A → Z</option>
+                <option value="name-desc">Name Z → A</option>
+                <option value="size-desc">Largest first</option>
+                <option value="size-asc">Smallest first</option>
+              </select>
+              <i data-lucide="arrow-up-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none"></i>
+            </div>
+
+            <button id="clearHistoryBtn" class="btn btn-sm btn-outline">
+              <i data-lucide="trash-2"></i> Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="image">Images</button>
+          <button class="filter-pill" data-filter="video">Videos</button>
+          <button class="filter-pill" data-filter="audio">Audio</button>
+          <button class="filter-pill" data-filter="document">Docs</button>
+          <button class="filter-pill" data-filter="archive">Archives</button>
+          <span id="historyCountLabel" class="ml-auto text-[11px] font-semibold text-muted"></span>
+        </div>
+      </div>
+
+      <!-- History grid -->
+      <div id="historyList" class="mt-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite"></div>
+
+      <!-- History skeleton -->
+      <div id="historySkeleton" class="mt-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 hidden">
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="historyEmpty" class="mt-4 surface rounded-2xl py-14 px-6 text-center hidden">
+        <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl anim-float" style="background:var(--brand-soft); color:var(--brand)">
+          <i data-lucide="folder-open" class="w-7 h-7"></i>
+        </div>
+        <h3 class="mt-4 font-display text-lg font-bold">No uploads yet.</h3>
+        <p class="mt-1.5 text-sm text-muted">Upload your first file to get started.</p>
+        <a href="#upload" class="btn btn-primary mt-5">
+          <i data-lucide="upload-cloud"></i> Upload a file
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FEATURES
+       ============================================================ -->
+  <section id="features" class="scroll-mt-20 py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">
+          Built like a <span class="gradient-text">real hosting service</span>
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted leading-relaxed">
+          Everything you need to move files around the internet — fast, safe and shareable.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">Instant public links</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Every upload returns a short shareable URL plus a direct CDN link you can drop anywhere.
+          </p>
+        </article>
+
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">Safe by design</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Filenames are sanitized, executables blocked, and every byte is re-validated server-side.
+          </p>
+        </article>
+
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="eye" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">Rich previews</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Zoom images, play video and audio, preview PDFs, and inspect metadata before sharing.
+          </p>
+        </article>
+
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="share-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">One-tap sharing</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Native share sheet on mobile, plus WhatsApp, Telegram, X and Facebook fallbacks.
+          </p>
+        </article>
+
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="qr-code" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">QR codes</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Generate a scannable QR for any link — perfect for moving files between devices.
+          </p>
+        </article>
+
+        <article class="surface rounded-2xl p-5 reveal">
+          <div class="grid h-11 w-11 place-items-center rounded-xl" style="background:var(--brand-soft); color:var(--brand)">
+            <i data-lucide="history" class="w-5 h-5"></i>
+          </div>
+          <h3 class="mt-4 font-display text-base font-bold">Private history</h3>
+          <p class="mt-1.5 text-sm text-muted leading-relaxed">
+            Search, filter and sort your past uploads. Nothing leaves your browser unless you share it.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="border-t soft-border mt-6">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="sm:col-span-2 lg:col-span-1">
+        <div class="flex items-center gap-2.5">
+          <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 via-violet-500 to-cyan-500">
+            <i data-lucide="link-2" class="w-[18px] h-[18px] text-white"></i>
+          </span>
+          <span class="font-display text-lg font-extrabold">Aruna<span class="gradient-text">Link</span></span>
+        </div>
+        <p class="mt-3 text-sm text-muted leading-relaxed max-w-xs">
+          Upload anything. Share anywhere. A modern, free public file hosting front-end.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-display text-sm font-bold">Product</h4>
+        <ul class="mt-3 space-y-2 text-sm text-muted">
+          <li><a href="#upload" class="hover:text-brand-500 transition-colors">Upload</a></li>
+          <li><a href="#recent" class="hover:text-brand-500 transition-colors">Recent uploads</a></li>
+          <li><a href="#dashboard" class="hover:text-brand-500 transition-colors">Dashboard</a></li>
+          <li><a href="#features" class="hover:text-brand-500 transition-colors">Features</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display text-sm font-bold">Supported</h4>
+        <ul class="mt-3 space-y-2 text-sm text-muted">
+          <li>Images &amp; screenshots</li>
+          <li>Video &amp; audio</li>
+          <li>Documents &amp; PDFs</li>
+          <li>ZIP / RAR archives</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display text-sm font-bold">Status</h4>
+        <div class="mt-3 space-y-2.5 text-sm text-muted">
+          <p class="flex items-center gap-2">
+            <span id="footerModeDot" class="h-2 w-2 rounded-full bg-slate-400"></span>
+            <span id="footerModeText">Checking backend…</span>
+          </p>
+          <p class="flex items-center gap-2">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i> No secrets in frontend
+          </p>
+          <p class="flex items-center gap-2">
+            <i data-lucide="server" class="w-3.5 h-3.5"></i> Vercel-ready API
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-9 pt-6 border-t soft-border flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-muted">© <span id="year">2025</span> ArunaLink. All rights reserved.</p>
+      <p class="text-xs text-muted">Built with HTML5 · Tailwind CSS · Vanilla JavaScript</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MOBILE BOTTOM NAV
+     ============================================================ -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t soft-border backdrop-blur-xl"
+     style="background: color-mix(in srgb, var(--bg) 88%, transparent); padding-bottom: env(safe-area-inset-bottom);"
+     aria-label="Mobile navigation">
+  <div class="flex items-center px-2">
+    <a href="#upload" class="mobile-nav-item" data-mnav="upload">
+      <i data-lucide="upload-cloud"></i><span>Upload</span>
+    </a>
+    <a href="#recent" class="mobile-nav-item" data-mnav="recent">
+      <i data-lucide="history"></i><span>Recent</span>
+    </a>
+    <a href="#dashboard" class="mobile-nav-item" data-mnav="dashboard">
+      <i data-lucide="bar-chart-3"></i><span>Stats</span>
+    </a>
+    <button id="mobileThemeBtn" class="mobile-nav-item" type="button">
+      <i data-lucide="moon"></i><span>Theme</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     TOAST HOST
+     ============================================================ -->
+<div id="toastHost" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ============================================================
+     FULLSCREEN LOADER
+     ============================================================ -->
+<div id="fullscreenLoader" class="hidden fixed inset-0 z-[140] items-center justify-center" style="background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px);">
+  <div class="text-center">
+    <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 via-violet-500 to-cyan-500 shadow-xl shadow-brand-500/30">
+      <i data-lucide="loader-2" class="w-7 h-7 text-white animate-spin"></i>
+    </div>
+    <p id="fullscreenLoaderText" class="mt-4 text-sm font-semibold">Working…</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     RESULT MODAL (upload success)
+     ============================================================ -->
+<div id="resultModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="modal-panel max-w-xl">
+    <div class="flex items-start justify-between gap-3 p-5 border-b soft-border">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-500/15 text-emerald-500 shrink-0">
+          <i data-lucide="check-circle-2" class="w-6 h-6 anim-check"></i>
+        </span>
+        <div class="min-w-0">
+          <h3 id="resultTitle" class="font-display text-base font-extrabold">Upload Successful</h3>
+          <p class="text-xs text-muted truncate" id="resultSubtitle">Your file is ready!</p>
+        </div>
+      </div>
+      <button class="icon-btn" data-close-modal aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="p-5 overflow-y-auto">
+      <!-- File summary -->
+      <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface-2)">
+        <div id="resultIcon" class="ui-icon"></div>
+        <div class="min-w-0 flex-1">
+          <p id="resultName" class="text-sm font-semibold truncate">file.jpg</p>
+          <p id="resultMeta" class="text-xs text-muted">JPG · 2.4 MB</p>
+        </div>
+        <button id="resultPreviewBtn" class="icon-btn" title="Preview" aria-label="Preview file">
+          <i data-lucide="eye"></i>
+        </button>
+      </div>
+
+      <!-- Public URL -->
+      <div class="mt-4">
+        <label class="text-[11px] font-bold uppercase tracking-wide text-muted">Public URL</label>
+        <div class="copy-field mt-1.5">
+          <i data-lucide="link" class="w-4 h-4 text-muted shrink-0"></i>
+          <input id="resultPublicUrl" type="text" readonly value="" aria-label="Public URL" />
+          <button class="icon-btn success" data-copy-target="resultPublicUrl" aria-label="Copy public URL" title="Copy">
+            <i data-lucide="copy"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Direct URL -->
+      <div class="mt-3">
+        <label class="text-[11px] font-bold uppercase tracking-wide text-muted">Direct URL</label>
+        <div class="copy-field mt-1.5">
+          <i data-lucide="download" class="w-4 h-4 text-muted shrink-0"></i>
+          <input id="resultDirectUrl" type="text" readonly value="" aria-label="Direct URL" />
+          <button class="icon-btn success" data-copy-target="resultDirectUrl" aria-label="Copy direct URL" title="Copy">
+            <i data-lucide="copy"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <button id="resultCopyBtn" class="btn btn-primary btn-sm"><i data-lucide="copy"></i> Copy link</button>
+        <button id="resultOpenBtn" class="btn btn-ghost btn-sm"><i data-lucide="external-link"></i> Open</button>
+        <button id="resultShareBtn" class="btn btn-ghost btn-sm"><i data-lucide="share-2"></i> Share</button>
+        <button id="resultDownloadBtn" class="btn btn-ghost btn-sm"><i data-lucide="download"></i> Download</button>
+        <button id="resultQrBtn" class="btn btn-ghost btn-sm"><i data-lucide="qr-code"></i> QR code</button>
+        <button id="resultDeleteBtn" class="btn btn-danger btn-sm"><i data-lucide="trash-2"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PREVIEW MODAL
+     ============================================================ -->
+<div id="previewModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+  <div class="modal-panel max-w-4xl">
+    <div class="flex items-center justify-between gap-3 p-4 border-b soft-border">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <i data-lucide="eye" class="w-4 h-4 text-brand-500 shrink-0"></i>
+        <h3 id="previewTitle" class="font-display text-sm font-bold truncate">Preview</h3>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button id="previewDownloadBtn" class="icon-btn" title="Download" aria-label="Download">
+          <i data-lucide="download"></i>
+        </button>
+        <button id="previewOpenBtn" class="icon-btn" title="Open in new tab" aria-label="Open in new tab">
+          <i data-lucide="external-link"></i>
+        </button>
+        <button class="icon-btn" data-close-modal aria-label="Close preview">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="previewBody" class="overflow-y-auto" style="background: var(--surface-2);"></div>
+
+    <div id="previewFooter" class="p-4 border-t soft-border text-xs text-muted flex flex-wrap items-center gap-x-5 gap-y-1.5"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SHARE MODAL
+     ============================================================ -->
+<div id="shareModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+  <div class="modal-panel max-w-md">
+    <div class="flex items-center justify-between gap-3 p-5 border-b soft-border">
+      <div class="flex items-center gap-2.5">
+        <i data-lucide="share-2" class="w-4 h-4 text-brand-500"></i>
+        <h3 id="shareTitle" class="font-display text-sm font-bold">Share this file</h3>
+      </div>
+      <button class="icon-btn" data-close-modal aria-label="Close share dialog">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="p-5">
+      <div class="copy-field">
+        <i data-lucide="link" class="w-4 h-4 text-muted shrink-0"></i>
+        <input id="shareUrlInput" type="text" readonly value="" aria-label="Shareable URL" />
+        <button class="icon-btn success" data-copy-target="shareUrlInput" aria-label="Copy URL" title="Copy">
+          <i data-lucide="copy"></i>
+        </button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-2 gap-2.5">
+        <button class="btn btn-ghost justify-start" data-share="whatsapp"><i data-lucide="message-circle"></i> WhatsApp</button>
+        <button class="btn btn-ghost justify-start" data-share="telegram"><i data-lucide="send"></i> Telegram</button>
+        <button class="btn btn-ghost justify-start" data-share="x"><i data-lucide="twitter"></i> X</button>
+        <button class="btn btn-ghost justify-start" data-share="facebook"><i data-lucide="facebook"></i> Facebook</button>
+      </div>
+
+      <button id="nativeShareBtn" class="btn btn-primary w-full mt-3">
+        <i data-lucide="share"></i> Use device share
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     QR MODAL
+     ============================================================ -->
+<div id="qrModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="modal-panel max-w-sm">
+    <div class="flex items-center justify-between gap-3 p-5 border-b soft-border">
+      <div class="flex items-center gap-2.5">
+        <i data-lucide="qr-code" class="w-4 h-4 text-brand-500"></i>
+        <h3 id="qrTitle" class="font-display text-sm font-bold">QR code</h3>
+      </div>
+      <button class="icon-btn" data-close-modal aria-label="Close QR dialog">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="p-5 text-center">
+      <div class="inline-block p-3 rounded-2xl bg-white shadow-lg">
+        <canvas id="qrCanvas" width="240" height="240" class="block max-w-full h-auto" aria-label="QR code for the file link"></canvas>
+      </div>
+      <p id="qrCaption" class="mt-4 text-xs text-muted break-all"></p>
+      <div class="mt-4 flex gap-2 justify-center">
+        <button id="qrDownloadBtn" class="btn btn-ghost btn-sm"><i data-lucide="download"></i> Save PNG</button>
+        <button id="qrCopyBtn" class="btn btn-primary btn-sm"><i data-lucide="copy"></i> Copy link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CONFIRM MODAL
+     ============================================================ -->
+<div id="confirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal-panel max-w-sm">
+    <div class="p-5">
+      <div class="flex items-start gap-3">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-red-500/12 text-red-500 shrink-0">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </span>
+        <div class="min-w-0">
+          <h3 id="confirmTitle" class="font-display text-base font-bold">Are you sure?</h3>
+          <p id="confirmMessage" class="mt-1.5 text-sm text-muted leading-relaxed">This action cannot be undone.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-2 justify-end">
+        <button id="confirmCancelBtn" class="btn btn-ghost btn-sm">Cancel</button>
+        <button id="confirmOkBtn" class="btn btn-danger btn-sm">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+"use strict";
+
+/* ================================================================
+   1. CONFIGURATION  —  edit these values to match your deployment
+   ================================================================ */
+
+/**
+ * Main application configuration.
+ * MAX_FILE_SIZE  : maximum size per file, in bytes (default 100 MB)
+ * MAX_FILES      : maximum number of files allowed in the queue at once
+ * ALLOWED_TYPES  : array of allowed MIME types. Empty array = allow all MIME types.
+ * ALLOWED_EXTENSIONS : array of allowed extensions (no dot). Empty = allow all.
+ * BLOCKED_EXTENSIONS : extensions that are always rejected (executables / active content).
+ * CONCURRENCY    : how many files upload in parallel
+ * AUTO_UPLOAD    : start uploading as soon as files are added
+ * DEMO_FALLBACK  : if the backend is unreachable, store files locally (IndexedDB)
+ *                  so the UI remains fully functional. Set to false in production
+ *                  if you want hard failures instead.
+ */
+const CONFIG = {
+  APP_NAME: "ArunaLink",
+  BASE_URL: "https://arunalink.vercel.app",
+
+  MAX_FILE_SIZE: 100 * 1024 * 1024, // 100 MB
+  MAX_FILES: 10,
+  ALLOWED_TYPES: [],      // e.g. ["image/png", "image/jpeg"] — empty means "allow all"
+  ALLOWED_EXTENSIONS: [], // e.g. ["png", "jpg", "pdf"] — empty means "allow all"
+
+  BLOCKED_EXTENSIONS: [
+    "exe", "msi", "bat", "cmd", "com", "scr", "pif", "cpl", "hta",
+    "ps1", "psm1", "vbs", "vbe", "wsf", "wsh", "jar", "dll", "so",
+    "app", "dmg", "apk", "deb", "rpm", "sh", "bash", "reg",
+    "html", "htm", "xhtml", "shtml", "svgz"
+  ],
+
+  CONCURRENCY: 3,
+  AUTO_UPLOAD: true,
+  DEMO_FALLBACK: true,
+
+  // Upload transport: "xhr" gives real byte-level progress; "fetch" uses AbortController.
+  UPLOAD_TRANSPORT: "xhr",
+
+  HISTORY_LIMIT: 300,
+  STORAGE_KEYS: {
+    HISTORY: "arunalink.history.v1",
+    THEME: "arunalink.theme.v1",
+    SOUND: "arunalink.sound.v1",
+    AUTOUPLOAD: "arunalink.autoupload.v1"
+  }
+};
+
+/**
+ * Backend endpoints. These must be implemented server-side (Vercel Functions,
+ * Cloudflare Workers, Express, etc.). Never put storage credentials here.
+ */
+const API_CONFIG = {
+  UPLOAD_ENDPOINT: "/api/upload",
+  FILE_ENDPOINT: "/api/file",
+  DELETE_ENDPOINT: "/api/delete",
+  HEALTH_ENDPOINT: "/api/health",
+  FIELD_NAME: "file"
+};
+
+/* ================================================================
+   2. STATE
+   ================================================================ */
+const state = {
+  queue: [],          // active upload items
+  history: [],        // persisted upload metadata
+  theme: "system",
+  sound: true,
+  autoUpload: true,
+  demoMode: false,
+  backendChecked: false,
+  filter: "all",
+  sort: "newest",
+  search: "",
+  lastResult: null,
+  objectUrls: new Map() // id -> blob URL (demo mode)
+};
+
+let uidCounter = 0;
+const modalStack = [];
+let lastFocusedElement = null;
+
+/* ================================================================
+   3. SMALL UTILITIES
+   ================================================================ */
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function makeEl(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined && text !== null) e.textContent = String(text);
+  return e;
+}
+
+function iconEl(name, cls) {
+  const i = document.createElement("i");
+  i.setAttribute("data-lucide", name);
+  if (cls) i.className = cls;
+  return i;
+}
+
+function refreshIcons() {
+  if (window.lucide && typeof window.lucide.createIcons === "function") {
+    try { window.lucide.createIcons(); } catch (_) { /* noop */ }
+  }
+}
+
+function uid() {
+  uidCounter += 1;
+  const rand = Math.random().toString(36).slice(2, 8);
+  return "q" + Date.now().toString(36) + uidCounter.toString(36) + rand;
+}
+
+function formatBytes(bytes, decimals) {
+  const b = Number(bytes) || 0;
+  if (b <= 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.min(sizes.length - 1, Math.floor(Math.log(b) / Math.log(k)));
+  const d = decimals === undefined ? (i === 0 ? 0 : 1) : decimals;
+  return parseFloat((b / Math.pow(k, i)).toFixed(d)) + " " + sizes[i];
+}
+
+function formatSpeed(bytesPerSecond) {
+  if (!bytesPerSecond || !isFinite(bytesPerSecond) || bytesPerSecond <= 0) return "—";
+  return formatBytes(bytesPerSecond, 1) + "/s";
+}
+
+function formatEta(seconds) {
+  if (!isFinite(seconds) || seconds <= 0) return "—";
+  if (seconds < 60) return Math.ceil(seconds) + "s left";
+  const m = Math.floor(seconds / 60);
+  const s = Math.round(seconds % 60);
+  if (m < 60) return m + "m " + s + "s left";
+  return Math.floor(m / 60) + "h " + (m % 60) + "m left";
+}
+
+function timeAgo(ts) {
+  const diff = Math.max(0, Date.now() - Number(ts || 0));
+  const sec = Math.floor(diff / 1000);
+  if (sec < 10) return "just now";
+  if (sec < 60) return sec + " seconds ago";
+  const min = Math.floor(sec / 60);
+  if (min < 60) return min + (min === 1 ? " minute ago" : " minutes ago");
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + (hr === 1 ? " hour ago" : " hours ago");
+  const day = Math.floor(hr / 24);
+  if (day < 30) return day + (day === 1 ? " day ago" : " days ago");
+  const mo = Math.floor(day / 30);
+  if (mo < 12) return mo + (mo === 1 ? " month ago" : " months ago");
+  return Math.floor(mo / 12) + "y ago";
+}
+
+function getExt(name) {
+  const s = String(name || "");
+  const idx = s.lastIndexOf(".");
+  if (idx <= 0 || idx === s.length - 1) return "";
+  return s.slice(idx + 1).toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/* ================================================================
+   4. FILE TYPE DETECTION
+   ================================================================ */
+
+const EXT_MAP = {
+  // images
+  jpg: "image", jpeg: "image", png: "image", webp: "image", gif: "image",
+  svg: "image", bmp: "image", avif: "image", ico: "image", tiff: "image", tif: "image", heic: "image",
+  // video
+  mp4: "video", webm: "video", mov: "video", avi: "video", mkv: "video",
+  m4v: "video", mpeg: "video", mpg: "video", wmv: "video", flv: "video", "3gp": "video",
+  // audio
+  mp3: "audio", wav: "audio", ogg: "audio", m4a: "audio", flac: "audio",
+  aac: "audio", opus: "audio", wma: "audio", aiff: "audio",
+  // documents
+  pdf: "document", txt: "document", doc: "document", docx: "document",
+  xls: "document", xlsx: "document", ppt: "document", pptx: "document",
+  rtf: "document", odt: "document", ods: "document", odp: "document",
+  csv: "document", md: "document", json: "document", xml: "document",
+  // archives
+  zip: "archive", rar: "archive", "7z": "archive", tar: "archive",
+  gz: "archive", bz2: "archive", xz: "archive", tgz: "archive", iso: "archive",
+  // code
+  js: "code", ts: "code", css: "code", py: "code", java: "code",
+  c: "code", cpp: "code", rb: "code", go: "code", rs: "code", php: "code", yml: "code", yaml: "code"
+};
+
+function getFileKind(mime, ext) {
+  const m = String(mime || "").toLowerCase();
+  if (m.startsWith("image/")) return "image";
+  if (m.startsWith("video/")) return "video";
+  if (m.startsWith("audio/")) return "audio";
+  if (m === "application/pdf") return "document";
+  if (m.startsWith("text/")) return "document";
+  if (m.indexOf("word") > -1 || m.indexOf("spreadsheet") > -1 || m.indexOf("presentation") > -1) return "document";
+  if (m.indexOf("zip") > -1 || m.indexOf("rar") > -1 || m.indexOf("tar") > -1 || m.indexOf("7z") > -1 || m.indexOf("compress") > -1) return "archive";
+  if (m.indexOf("javascript") > -1 || m.indexOf("json") > -1 || m.indexOf("xml") > -1) return "code";
+  return EXT_MAP[String(ext || "").toLowerCase()] || "other";
+}
+
+const KIND_ICONS = {
+  image: "image",
+  video: "film",
+  audio: "music",
+  document: "file-text",
+  archive: "archive",
+  code: "file-code",
+  other: "file"
+};
+
+function renderFileIcon(kind) {
+  return KIND_ICONS[kind] || "file";
+}
+
+/* ================================================================
+   5. FILENAME SANITIZATION
+   ================================================================ */
+
+function sanitizeFilename(name) {
+  let n = String(name || "file");
+  try { n = n.normalize("NFKC"); } catch (_) { /* noop */ }
+
+  // Strip control characters (including NUL, newlines, RTL overrides)
+  n = n.replace(/[\u0000-\u001F\u007F\u200E\u200F\u202A-\u202E]/g, "");
+  // Strip path separators and Windows-reserved characters
+  n = n.replace(/[<>:"/\\|?*]/g, "_");
+  // Remove leading dots (hidden files / path traversal)
+  n = n.replace(/^\.+/, "");
+  // Remove trailing dots and spaces (Windows)
+  n = n.replace(/[.\s]+$/, "");
+  // Collapse whitespace
+  n = n.replace(/\s+/g, " ").trim();
+  // Neutralise ".." sequences anywhere
+  n = n.replace(/\.\./g, "_");
+
+  if (!n) n = "file";
+
+  const MAX = 180;
+  if (n.length > MAX) {
+    const ext = getExt(n);
+    const base = ext ? n.slice(0, n.length - ext.length - 1) : n;
+    n = ext ? base.slice(0, MAX - ext.length - 1) + "." + ext : base.slice(0, MAX);
+  }
+  return n;
+}
+
+function hasDangerousChars(name) {
+  return /[<>:"/\\|?*\u0000-\u001F\u007F]/.test(String(name || ""));
+}
+
+/* ================================================================
+   6. THEME
+   ================================================================ */
+
+const THEME_ICONS = { light: "sun", dark: "moon", system: "monitor" };
+
+function loadTheme() {
+  try {
+    const saved = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+    if (saved === "light" || saved === "dark" || saved === "system") state.theme = saved;
+  } catch (_) { /* noop */ }
+}
+
+function applyTheme() {
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const dark = state.theme === "dark" || (state.theme === "system" && prefersDark);
+  document.documentElement.classList.toggle("dark", dark);
+
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", dark ? "#070b18" : "#f8fafc");
+
+  $$("#themeToggle, #mobileThemeBtn").forEach(btn => {
+    const holder = btn.querySelector("svg") ? btn : btn;
+    holder.innerHTML = "";
+    holder.appendChild(iconEl(THEME_ICONS[state.theme] || "monitor"));
+  });
+  const themeToggle = $("#themeToggle");
+  if (themeToggle) themeToggle.setAttribute("title", "Theme: " + state.theme);
+  refreshIcons();
+}
+
+function toggleTheme() {
+  const order = ["system", "light", "dark"];
+  const idx = order.indexOf(state.theme);
+  state.theme = order[(idx + 1) % order.length];
+  try { localStorage.setItem(CONFIG.STORAGE_KEYS.THEME, state.theme); } catch (_) { /* noop */ }
+  applyTheme();
+  playSound("click");
+  showToast("info", "Theme changed", "Now using " + state.theme + " mode.");
+}
+
+/* ================================================================
+   7. SOUND EFFECTS (Web Audio API — no external files)
+   ================================================================ */
+
+let audioCtx = null;
+
+function ensureAudio() {
+  if (audioCtx) return audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  try { audioCtx = new Ctx(); } catch (_) { audioCtx = null; }
+  return audioCtx;
+}
+
+function tone(freq, startOffset, duration, type, peakGain) {
+  const ctx = ensureAudio();
+  if (!ctx) return;
+  if (ctx.state === "suspended") { ctx.resume().catch(() => {}); }
+
+  const t0 = ctx.currentTime + startOffset;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = type || "sine";
+  osc.frequency.setValueAtTime(freq, t0);
+
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(peakGain || 0.05, t0 + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + duration + 0.02);
+}
+
+function playSound(name) {
+  if (!state.sound) return;
+  try {
+    switch (name) {
+      case "click":    tone(660, 0, 0.05, "square", 0.022); break;
+      case "start":    tone(420, 0, 0.10, "sine", 0.045); tone(640, 0.07, 0.12, "sine", 0.04); break;
+      case "success":  tone(523.25, 0, 0.11, "sine", 0.055); tone(659.25, 0.09, 0.11, "sine", 0.05); tone(783.99, 0.18, 0.20, "sine", 0.05); break;
+      case "error":    tone(200, 0, 0.16, "sawtooth", 0.045); tone(150, 0.13, 0.22, "sawtooth", 0.04); break;
+      case "copy":     tone(880, 0, 0.06, "triangle", 0.035); tone(1180, 0.05, 0.08, "triangle", 0.03); break;
+      case "delete":   tone(420, 0, 0.09, "triangle", 0.04); tone(260, 0.08, 0.16, "triangle", 0.035); break;
+      default: break;
+    }
+  } catch (_) { /* audio must never break the app */ }
+}
+
+function loadSoundPref() {
+  try {
+    const v = localStorage.getItem(CONFIG.STORAGE_KEYS.SOUND);
+    if (v === "off") state.sound = false;
+    if (v === "on") state.sound = true;
+  } catch (_) { /* noop */ }
+}
+
+function updateSoundButton() {
+  const btn = $("#soundToggle");
+  if (!btn) return;
+  btn.innerHTML = "";
+  btn.appendChild(iconEl(state.sound ? "volume-2" : "volume-x"));
+  btn.setAttribute("aria-pressed", String(state.sound));
+  btn.setAttribute("title", state.sound ? "Sound effects: ON" : "Sound effects: OFF");
+  btn.setAttribute("aria-label", state.sound ? "Turn sound effects off" : "Turn sound effects on");
+  refreshIcons();
+}
+
+function toggleSound() {
+  state.sound = !state.sound;
+  try { localStorage.setItem(CONFIG.STORAGE_KEYS.SOUND, state.sound ? "on" : "off"); } catch (_) { /* noop */ }
+  updateSoundButton();
+  if (state.sound) playSound("click");
+  showToast("info", state.sound ? "Sound on" : "Sound off", state.sound ? "Button and upload sounds are enabled." : "Sounds are muted.");
+}
+
+/* ================================================================
+   8. TOAST
+   ================================================================ */
+
+const TOAST_META = {
+  success: { icon: "check-circle-2", color: "var(--success)" },
+  error:   { icon: "alert-circle",   color: "var(--danger)" },
+  warning: { icon: "alert-triangle", color: "var(--warning)" },
+  info:    { icon: "info",           color: "var(--brand)" }
+};
+
+function showToast(type, title, message, duration) {
+  const host = $("#toastHost");
+  if (!host) return;
+
+  const meta = TOAST_META[type] || TOAST_META.info;
+  const toast = makeEl("div", "toast");
+  toast.setAttribute("role", type === "error" ? "alert" : "status");
+
+  const iconWrap = makeEl("span", "toast-icon");
+  iconWrap.style.color = meta.color;
+  iconWrap.appendChild(iconEl(meta.icon));
+  toast.appendChild(iconWrap);
+
+  const body = makeEl("div", "flex-1 min-w-0");
+  body.appendChild(makeEl("p", "toast-title", title));
+  if (message) body.appendChild(makeEl("p", "toast-msg", message));
+  toast.appendChild(body);
+
+  const closeBtn = makeEl("button", "icon-btn");
+  closeBtn.style.width = "24px";
+  closeBtn.style.height = "24px";
+  closeBtn.setAttribute("aria-label", "Dismiss notification");
+  closeBtn.appendChild(iconEl("x"));
+  closeBtn.addEventListener("click", () => dismissToast(toast));
+  toast.appendChild(closeBtn);
+
+  host.appendChild(toast);
+  refreshIcons();
+
+  const ms = duration || (type === "error" ? 6500 : 4200);
+  const timer = setTimeout(() => dismissToast(toast), ms);
+  toast.addEventListener("mouseenter", () => clearTimeout(timer), { once: true });
+}
+
+function dismissToast(toast) {
+  if (!toast || !toast.parentNode) return;
+  toast.classList.add("out");
+  setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 260);
+}
+
+/* ================================================================
+   9. MODALS
+   ================================================================ */
+
+function showModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  if (modalStack.indexOf(modal) === -1) modalStack.push(modal);
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  requestAnimationFrame(() => modal.classList.add("is-open"));
+
+  lastFocusedElement = document.activeElement;
+  setTimeout(() => {
+    const target = modal.querySelector("[data-autofocus]") ||
+                   modal.querySelector("input, button, [href], select, textarea");
+    if (target && typeof target.focus === "function") target.focus();
+  }, 60);
+}
+
+function closeModal(id) {
+  const modal = id ? document.getElementById(id) : modalStack[modalStack.length - 1];
+  if (!modal) return;
+
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+
+  const idx = modalStack.indexOf(modal);
+  if (idx > -1) modalStack.splice(idx, 1);
+
+  setTimeout(() => {
+    modal.classList.add("hidden");
+    if (modalStack.length === 0) document.body.classList.remove("modal-open");
+  }, 300);
+
+  if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+    try { lastFocusedElement.focus(); } catch (_) { /* noop */ }
+  }
+}
+
+function closeAllModals() {
+  while (modalStack.length) closeModal();
+}
+
+/* Focus trap */
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Tab" || modalStack.length === 0) return;
+  const modal = modalStack[modalStack.length - 1];
+  const focusables = $$('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])', modal)
+    .filter(el => el.offsetParent !== null);
+  if (focusables.length === 0) return;
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault(); first.focus();
+  }
+});
+
+/* ================================================================
+   10. CONFIRM DIALOG
+   ================================================================ */
+
+let confirmResolver = null;
+
+function openConfirm(title, message, okLabel, variant) {
+  return new Promise(resolve => {
+    const titleEl = $("#confirmTitle");
+    const msgEl = $("#confirmMessage");
+    const okBtn = $("#confirmOkBtn");
+
+    titleEl.textContent = title;
+    msgEl.textContent = message;
+    okBtn.textContent = okLabel || "Confirm";
+    okBtn.className = "btn btn-sm " + (variant === "primary" ? "btn-primary" : "btn-danger");
+
+    confirmResolver = resolve;
+    showModal("confirmModal");
+  });
+}
+
+function resolveConfirm(value) {
+  closeModal("confirmModal");
+  if (confirmResolver) {
+    const r = confirmResolver;
+    confirmResolver = null;
+    setTimeout(() => r(value), 10);
+  }
+}
+
+/* ================================================================
+   11. INDEXEDDB (local demo storage — no binary in localStorage)
+   ================================================================ */
+
+const LocalStore = (function () {
+  const DB_NAME = "arunalink";
+  const DB_VERSION = 1;
+  const STORE = "files";
+  let dbPromise = null;
+  let available = true;
+
+  function open() {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise((resolve, reject) => {
+      if (!window.indexedDB) { reject(new Error("IndexedDB unavailable")); return; }
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(STORE)) {
+          db.createObjectStore(STORE, { keyPath: "id" });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error || new Error("IndexedDB error"));
+    }).catch(err => { available = false; throw err; });
+    return dbPromise;
+  }
+
+  function run(mode, fn) {
+    return open().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, mode);
+      const store = tx.objectStore(STORE);
+      let result;
+      try { result = fn(store); } catch (e) { reject(e); return; }
+      tx.oncomplete = () => resolve(result && result.__req ? result.__req.result : result);
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+    }));
+  }
+
+  return {
+    isAvailable() { return available; },
+    put(record) { return run("readwrite", s => { s.put(record); }); },
+    get(id) { return run("readonly", s => { const r = s.get(id); return { __req: r }; }); },
+    getAll() { return run("readonly", s => { const r = s.getAll(); return { __req: r }; }); },
+    remove(id) { return run("readwrite", s => { s.delete(id); }); },
+    clear() { return run("readwrite", s => { s.clear(); }); }
+  };
+})();
+
+/* ================================================================
+   12. HISTORY (localStorage metadata only)
+   ================================================================ */
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(CONFIG.STORAGE_KEYS.HISTORY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(r => r && typeof r === "object" && r.id && r.name);
+  } catch (_) {
+    return [];
+  }
+}
+
+function saveHistory() {
+  try {
+    const trimmed = state.history.slice(0, CONFIG.HISTORY_LIMIT);
+    localStorage.setItem(CONFIG.STORAGE_KEYS.HISTORY, JSON.stringify(trimmed));
+  } catch (_) {
+    // Quota exceeded — drop oldest half and retry once
+    try {
+      state.history = state.history.slice(0, Math.floor(CONFIG.HISTORY_LIMIT / 2));
+      localStorage.setItem(CONFIG.STORAGE_KEYS.HISTORY, JSON.stringify(state.history));
+    } catch (__) { /* give up silently */ }
+  }
+}
+
+function addHistoryRecord(record) {
+  state.history = state.history.filter(r => r.id !== record.id);
+  state.history.unshift(record);
+  if (state.history.length > CONFIG.HISTORY_LIMIT) {
+    state.history = state.history.slice(0, CONFIG.HISTORY_LIMIT);
+  }
+  saveHistory();
+  renderHistory();
+  renderStats();
+}
+
+async function hydrateDemoUrls() {
+  if (!LocalStore.isAvailable()) return;
+  try {
+    const records = await LocalStore.getAll();
+    if (!Array.isArray(records)) return;
+    let changed = false;
+    records.forEach(rec => {
+      if (!rec || !rec.blob) return;
+      if (state.objectUrls.has(rec.id)) return;
+      const url = URL.createObjectURL(rec.blob);
+      state.objectUrls.set(rec.id, url);
+      const hist = state.history.find(h => h.id === rec.id);
+      if (hist) { hist.directUrl = url; changed = true; }
+    });
+    if (changed) { saveHistory(); renderHistory(); }
+  } catch (_) { /* noop */ }
+}
+
+/* ================================================================
+   13. BACKEND DETECTION
+   ================================================================ */
+
+async function checkBackend() {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4500);
+
+    const res = await fetch(API_CONFIG.HEALTH_ENDPOINT, {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+      signal: controller.signal,
+      cache: "no-store"
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) throw new Error("Backend not available");
+
+    let payload = null;
+    try { payload = await res.json(); } catch (_) { payload = null; }
+
+    // If the API explicitly reports demo mode, honour it.
+    state.demoMode = !!(payload && payload.demo === true);
+  } catch (_) {
+    state.demoMode = true;
+  }
+
+  state.backendChecked = true;
+  updateModeBadge();
+}
+
+function updateModeBadge() {
+  const badge = $("#modeBadge");
+  const badgeText = $("#modeBadgeText");
+  const dot = $("#footerModeDot");
+  const footerText = $("#footerModeText");
+
+  const connected = !state.demoMode;
+  const color = connected ? "#10b981" : "#f59e0b";
+  const label = connected ? "API connected" : "Local demo mode";
+
+  if (badge) badge.classList.remove("hidden");
+  if (badgeText) badgeText.textContent = label;
+  if (badge) {
+    const dotEl = badge.querySelector("span");
+    if (dotEl) dotEl.style.background = color;
+  }
+  if (dot) dot.style.background = color;
+  if (footerText) {
+    footerText.textContent = connected
+      ? "Connected to upload API"
+      : "Demo mode — files stay in this browser";
+  }
+}
+
+/* ================================================================
+   14. VALIDATION
+   ================================================================ */
+
+function validateFile(file, existingItems) {
+  const errors = [];
+  const items = existingItems || state.queue;
+
+  if (!file || typeof file.size !== "number") {
+    return { ok: false, errors: ["Invalid file object."] };
+  }
+
+  // 1. Empty file
+  if (file.size === 0) {
+    errors.push("File is empty (0 bytes).");
+  }
+
+  // 2. Size limit
+  if (file.size > CONFIG.MAX_FILE_SIZE) {
+    errors.push("Exceeds the " + formatBytes(CONFIG.MAX_FILE_SIZE) + " limit (this file is " + formatBytes(file.size) + ").");
+  }
+
+  const ext = getExt(file.name);
+  const mime = String(file.type || "").toLowerCase();
+
+  // 3. Extension present
+  if (!ext && !mime) {
+    errors.push("Unknown file type — no extension or MIME type detected.");
+  }
+
+  // 4. Blocked extensions (executables / active content)
+  if (ext && CONFIG.BLOCKED_EXTENSIONS.indexOf(ext) > -1) {
+    errors.push("." + ext + " files are not allowed for security reasons.");
+  }
+
+  // 5. Allow-list by extension
+  if (CONFIG.ALLOWED_EXTENSIONS.length > 0 && ext && CONFIG.ALLOWED_EXTENSIONS.indexOf(ext) === -1) {
+    errors.push("." + ext + " is not an accepted file type.");
+  }
+
+  // 6. Allow-list by MIME (client-reported — UX only, server re-validates)
+  if (CONFIG.ALLOWED_TYPES.length > 0) {
+    if (!mime) {
+      errors.push("Could not determine the MIME type of this file.");
+    } else if (CONFIG.ALLOWED_TYPES.indexOf(mime) === -1) {
+      errors.push(mime + " is not an accepted MIME type.");
+    }
+  }
+
+  // 7. Dangerous characters in name
+  if (hasDangerousChars(file.name)) {
+    // Not fatal — we sanitize. Informational only, so no error pushed.
+  }
+
+  // 8. Duplicate detection (name + size + lastModified)
+  const duplicate = items.some(item =>
+    item &&
+    item.file &&
+    item.file.name === file.name &&
+    item.file.size === file.size &&
+    item.file.lastModified === file.lastModified
+  );
+  if (duplicate) {
+    errors.push("This file is already in the upload queue.");
+  }
+
+  return { ok: errors.length === 0, errors: errors };
+}
+
+function validateFiles(fileArray) {
+  const accepted = [];
+  const rejected = [];
+  const working = state.queue.slice();
+
+  fileArray.forEach(file => {
+    if (working.length >= CONFIG.MAX_FILES) {
+      rejected.push({ file: file, errors: ["Queue is full — maximum " + CONFIG.MAX_FILES + " files at once."] });
+      return;
+    }
+
+    const result = validateFile(file, working);
+
+    if (!result.ok) {
+      rejected.push({ file: file, errors: result.errors });
+      return;
+    }
+
+    // Reserve a slot so duplicates within the same drop are caught
+    working.push({
+      id: "__pending__",
+      file: file
+    });
+    accepted.push(file);
+  });
+
+  return { accepted: accepted, rejected: rejected };
+}
+
+/* ================================================================
+   15. UPLOAD PIPELINE
+   ================================================================ */
+
+const STATUS_TEXT = {
+  queued: "Queued",
+  preparing: "Preparing…",
+  uploading: "Uploading…",
+  processing: "Processing…",
+  completed: "Completed",
+  failed: "Failed",
+  cancelled: "Cancelled"
+};
+
+const ACTIVE_STATUSES = ["preparing", "uploading", "processing"];
+
+function createFormData(file, item) {
+  const fd = new FormData();
+  const safeName = item ? item.safeName : sanitizeFilename(file.name);
+  fd.append(API_CONFIG.FIELD_NAME, file, safeName);
+  if (item) {
+    fd.append("clientId", item.id);
+    fd.append("originalName", item.name);
+  }
+  return fd;
+}
+
+/* ---- transport: XMLHttpRequest (real progress) ---- */
+function xhrUpload(item, formData) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    item.xhr = xhr;
+
+    xhr.open("POST", API_CONFIG.UPLOAD_ENDPOINT, true);
+    xhr.responseType = "json";
+    xhr.timeout = 0;
+    xhr.withCredentials = false;
+
+    xhr.upload.onprogress = function (e) {
+      if (e.lengthComputable && e.total > 0) {
+        updateItemProgress(item, e.loaded, e.total);
+      }
+    };
+
+    xhr.onload = function () {
+      let data = xhr.response;
+      if (!data) {
+        try { data = JSON.parse(xhr.responseText); } catch (_) { data = null; }
+      }
+      if (xhr.status >= 200 && xhr.status < 300 && data && data.success !== false) {
+        resolve(data);
+      } else {
+        const msg = (data && (data.error || data.message)) || ("Upload failed with status " + xhr.status);
+        reject(new Error(msg));
+      }
+    };
+
+    xhr.onerror = function () {
+      const err = new Error("Network error while uploading.");
+      err.code = "NETWORK";
+      reject(err);
+    };
+
+    xhr.onabort = function () {
+      const err = new Error("Upload cancelled.");
+      err.name = "AbortError";
+      reject(err);
+    };
+
+    xhr.ontimeout = function () {
+      reject(new Error("Upload timed out."));
+    };
+
+    xhr.send(formData);
+  });
+}
+
+/* ---- transport: fetch + AbortController ---- */
+async function fetchUpload(item, formData) {
+  const controller = new AbortController();
+  item.controller = controller;
+
+  const res = await fetch(API_CONFIG.UPLOAD_ENDPOINT, {
+    method: "POST",
+    body: formData,
+    signal: controller.signal
+  });
+
+  let data = null;
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.indexOf("application/json") > -1) {
+    try { data = await res.json(); } catch (_) { data = null; }
+  }
+
+  if (!res.ok || (data && data.success === false)) {
+    const msg = (data && (data.error || data.message)) || ("Upload failed with status " + res.status);
+    throw new Error(msg);
+  }
+  if (!data) throw new Error("Server returned an invalid response.");
+
+  // Simulate progress completion for the UI (fetch has no upload progress events)
+  updateItemProgress(item, item.size, item.size);
+  return data;
+}
+
+/* ---- transport: local demo (IndexedDB) ---- */
+function demoUpload(item) {
+  return new Promise((resolve, reject) => {
+    const total = item.file.size || 1;
+    const durationMs = Math.min(4200, Math.max(650, (total / (2.2 * 1024 * 1024)) * 1000));
+    const started = performance.now();
+
+    function step() {
+      if (item.cancelled) {
+        const err = new Error("Upload cancelled.");
+        err.name = "AbortError";
+        reject(err);
+        return;
+      }
+
+      const elapsed = performance.now() - started;
+      const ratio = Math.min(1, elapsed / durationMs);
+      updateItemProgress(item, total * ratio, total);
+
+      if (ratio < 1) {
+        item._raf = requestAnimationFrame(step);
+        return;
+      }
+
+      // Persist to IndexedDB
+      (async () => {
+        try {
+          const id = uid().replace(/^q/, "f");
+          const record = {
+            id: id,
+            name: item.safeName,
+            originalName: item.name,
+            size: item.size,
+            type: item.type,
+            kind: item.kind,
+            blob: item.file,
+            date: Date.now(),
+            demo: true
+          };
+
+          if (LocalStore.isAvailable()) {
+            await LocalStore.put(record);
+          }
+
+          const blobUrl = URL.createObjectURL(item.file);
+          state.objectUrls.set(id, blobUrl);
+
+          resolve({
+            success: true,
+            id: id,
+            filename: item.safeName,
+            size: item.size,
+            mime: item.type,
+            url: CONFIG.BASE_URL + "/f/" + id,
+            directUrl: blobUrl,
+            demo: true
+          });
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    }
+
+    item._raf = requestAnimationFrame(step);
+  });
+}
+
+/* ---- main single-file upload ---- */
+async function uploadFile(item) {
+  if (!item || item.status === "completed") return;
+
+  item.cancelled = false;
+  item.error = null;
+  item.status = "preparing";
+  item.progress = 0;
+  updateItemEl(item);
+  updateOverallProgress();
+
+  await sleep(140);
+  if (item.cancelled) return;
+
+  const formData = createFormData(item.file, item);
+
+  item.status = "uploading";
+  item.startedAt = performance.now();
+  item.lastLoaded = 0;
+  item.lastTime = item.startedAt;
+  item.speed = 0;
+  updateItemEl(item);
+  updateOverallProgress();
+  playSound("start");
+
+  try {
+    let response;
+
+    if (state.demoMode) {
+      response = await demoUpload(item);
+    } else if (CONFIG.UPLOAD_TRANSPORT === "fetch") {
+      response = await fetchUpload(item, formData);
+    } else {
+      response = await xhrUpload(item, formData);
+    }
+
+    if (item.cancelled) return;
+
+    // "Processing" phase
+    item.status = "processing";
+    item.progress = 100;
+    updateItemEl(item);
+    updateOverallProgress();
+    await sleep(280);
+
+    handleUploadSuccess(item, response);
+  } catch (err) {
+    if (err && err.name === "AbortError") {
+      item.status = "cancelled";
+      item.error = "Cancelled by user";
+      updateItemEl(item);
+      updateOverallProgress();
+      return;
+    }
+
+    // Automatic demo fallback when the backend does not exist
+    const isNetworkIssue = err && (err.code === "NETWORK" || /Failed to fetch|NetworkError|load failed/i.test(err.message || ""));
+    if (!state.demoMode && CONFIG.DEMO_FALLBACK && isNetworkIssue) {
+      state.demoMode = true;
+      updateModeBadge();
+      showToast("warning", "Backend unavailable", "Switched to local demo mode — files stay in this browser.");
+      try {
+        item.status = "uploading";
+        updateItemEl(item);
+        const response = await demoUpload(item);
+        item.status = "processing";
+        updateItemEl(item);
+        await sleep(240);
+        handleUploadSuccess(item, response);
+        return;
+      } catch (fallbackErr) {
+        handleUploadError(item, fallbackErr);
+        return;
+      }
+    }
+
+    handleUploadError(item, err);
+  }
+}
+
+/* ---- batch upload with concurrency ---- */
+async function uploadFiles(items) {
+  const candidates = (items && items.length ? items : state.queue)
+    .filter(i => i && (i.status === "queued" || i.status === "failed"));
+
+  if (candidates.length === 0) {
+    showToast("info", "Nothing to upload", "Add some files first.");
+    return;
+  }
+
+  const pool = candidates.slice();
+  let cursor = 0;
+
+  const workerCount = Math.min(CONFIG.CONCURRENCY, pool.length);
+
+  const workers = [];
+  for (let w = 0; w < workerCount; w++) {
+    workers.push((async function worker() {
+      while (cursor < pool.length) {
+        const item = pool[cursor++];
+        if (!item || item.status === "completed" || item.cancelled) continue;
+        await uploadFile(item);
+      }
+    })());
+  }
+
+  await Promise.all(workers);
+
+  updateOverallProgress();
+  renderQueueToolbar();
+
+  const successes = pool.filter(i => i.status === "completed");
+  const failures = pool.filter(i => i.status === "failed");
+
+  if (successes.length > 1) {
+    showToast("success", successes.length + " files uploaded", "All links are available in Recent uploads.");
+  }
+
+  if (successes.length > 0) {
+    const last = successes[successes.length - 1];
+    setTimeout(() => openResultModal(last), 220);
+  } else if (failures.length > 0) {
+    showToast("error", "Upload failed", failures[0].error || "Please try again.");
+  }
+}
+
+function cancelUpload(id) {
+  const item = state.queue.find(i => i.id === id);
+  if (!item) return;
+
+  item.cancelled = true;
+
+  if (item._raf) { cancelAnimationFrame(item._raf); item._raf = null; }
+  if (item.xhr && item.xhr.readyState !== 4) { try { item.xhr.abort(); } catch (_) {} }
+  if (item.controller) { try { item.controller.abort(); } catch (_) {} }
+
+  if (ACTIVE_STATUSES.indexOf(item.status) > -1 || item.status === "queued") {
+    item.status = "cancelled";
+    item.error = "Cancelled by user";
+    updateItemEl(item);
+    updateOverallProgress();
+    renderQueueToolbar();
+  }
+}
+
+async function retryUpload(id) {
+  const item = state.queue.find(i => i.id === id);
+  if (!item) return;
+  item.status = "queued";
+  item.progress = 0;
+  item.error = null;
+  updateItemEl(item);
+  await uploadFile(item);
+  updateOverallProgress();
+  renderQueueToolbar();
+}
+
+function removeUpload(id) {
+  const item = state.queue.find(i => i.id === id);
+  if (!item) return;
+
+  cancelUpload(id);
+
+  state.queue = state.queue.filter(i => i.id !== id);
+  if (item.el && item.el.parentNode) {
+    item.el.style.transition = "opacity .22s ease, transform .22s ease";
+    item.el.style.opacity = "0";
+    item.el.style.transform = "translateX(-14px)";
+    setTimeout(() => { if (item.el && item.el.parentNode) item.el.parentNode.removeChild(item.el); }, 200);
+  }
+  setTimeout(() => { renderQueue(); updateOverallProgress(); renderQueueToolbar(); }, 210);
+  playSound("delete");
+}
+
+function clearAllUploads() {
+  state.queue.forEach(item => cancelUpload(item.id));
+  state.queue = [];
+  renderQueue();
+  updateOverallProgress();
+  renderQueueToolbar();
+  playSound("delete");
+  showToast("info", "Queue cleared", "All files removed from the upload queue.");
+}
+
+function cancelAllUploads() {
+  let count = 0;
+  state.queue.forEach(item => {
+    if (ACTIVE_STATUSES.indexOf(item.status) > -1 || item.status === "queued") {
+      cancelUpload(item.id);
+      count++;
+    }
+  });
+  updateOverallProgress();
+  renderQueueToolbar();
+  if (count > 0) showToast("warning", "Uploads cancelled", count + " upload(s) stopped.");
+}
+
+/* ---- progress bookkeeping ---- */
+function updateItemProgress(item, loaded, total) {
+  const now = performance.now();
+
+  if (item.lastTime && now > item.lastTime) {
+    const dt = (now - item.lastTime) / 1000;
+    if (dt > 0.25) {
+      const dBytes = loaded - (item.lastLoaded || 0);
+      const inst = dBytes / dt;
+      item.speed = item.speed ? (item.speed * 0.65 + inst * 0.35) : inst;
+      item.lastLoaded = loaded;
+      item.lastTime = now;
+    }
+  } else {
+    item.lastTime = now;
+    item.lastLoaded = loaded;
+  }
+
+  const pct = total > 0 ? Math.min(100, (loaded / total) * 100) : 0;
+  item.progress = pct;
+  item.loaded = loaded;
+  item.total = total;
+
+  if (item.status !== "uploading") item.status = "uploading";
+
+  paintItemProgress(item);
+  updateOverallProgress();
+}
+
+function paintItemProgress(item) {
+  if (!item.el) return;
+  const bar = item.el.querySelector('[data-role="bar"]');
+  const stats = item.el.querySelector('[data-role="stats"]');
+  const statusEl = item.el.querySelector('[data-role="status"]');
+
+  if (bar) bar.style.width = item.progress.toFixed(1) + "%";
+  if (statusEl) {
+    statusEl.textContent = STATUS_TEXT[item.status] || item.status;
+    statusEl.setAttribute("data-s", item.status);
+  }
+
+  if (stats) {
+    if (item.status === "uploading") {
+      const remaining = item.speed > 0 ? ((item.total - item.loaded) / item.speed) : 0;
+      stats.textContent = formatSpeed(item.speed) + " · " + formatEta(remaining) + " · " +
+        formatBytes(item.loaded) + " / " + formatBytes(item.total);
+    } else if (item.status === "completed") {
+      stats.textContent = "Uploaded successfully";
+    } else if (item.status === "failed") {
+      stats.textContent = item.error || "Upload failed";
+    } else if (item.status === "cancelled") {
+      stats.textContent = "Upload cancelled";
+    } else if (item.status === "processing") {
+      stats.textContent = "Finalising on server…";
+    } else {
+      stats.textContent = "";
+    }
+  }
+}
+
+function showUploadProgress() { updateOverallProgress(); }
+
+function updateOverallProgress() {
+  const wrap = $("#overallWrap");
+  if (!wrap) return;
+
+  const active = state.queue.filter(i => ACTIVE_STATUSES.indexOf(i.status) > -1);
+
+  if (state.queue.length === 0 || active.length === 0) {
+    if (active.length === 0) {
+      setTimeout(() => {
+        const stillActive = state.queue.filter(i => ACTIVE_STATUSES.indexOf(i.status) > -1);
+        if (stillActive.length === 0) wrap.classList.add("hidden");
+      }, 700);
+    }
+    if (state.queue.length === 0) wrap.classList.add("hidden");
+    return;
+  }
+
+  wrap.classList.remove("hidden");
+
+  const totalBytes = state.queue.reduce((acc, i) => acc + (i.total || i.size || 0), 0);
+  const loadedBytes = state.queue.reduce((acc, i) => acc + (i.loaded || 0), 0);
+  const pct = totalBytes > 0 ? Math.min(100, (loadedBytes / totalBytes) * 100) : 0;
+
+  const bar = $("#overallBar");
+  const pctEl = $("#overallPct");
+  const labelEl = $("#overallLabel");
+  const statsEl = $("#overallStats");
+  const etaEl = $("#overallEta");
+
+  if (bar) bar.style.width = pct.toFixed(1) + "%";
+  if (pctEl) pctEl.textContent = Math.round(pct) + "%";
+  if (labelEl) labelEl.textContent = active.length + " file" + (active.length > 1 ? "s" : "") + " uploading";
+
+  const totalSpeed = state.queue.reduce((acc, i) => acc + (i.speed || 0), 0);
+  if (statsEl) statsEl.textContent = formatBytes(loadedBytes) + " of " + formatBytes(totalBytes) + " · " + formatSpeed(totalSpeed);
+  if (etaEl) etaEl.textContent = totalSpeed > 0 ? formatEta((totalBytes - loadedBytes) / totalSpeed) : "";
+}
+
+/* ---- success / error handlers ---- */
+function handleUploadSuccess(item, response) {
+  item.status = "completed";
+  item.progress = 100;
+  item.error = null;
+  item.remoteId = response.id;
+  item.publicUrl = response.url || (CONFIG.BASE_URL + "/f/" + response.id);
+  item.directUrl = response.directUrl || item.publicUrl;
+  item.serverFilename = response.filename || item.safeName;
+
+  updateItemEl(item);
+  paintItemProgress(item);
+  updateOverallProgress();
+  renderQueueToolbar();
+  playSound("success");
+
+  const record = {
+    id: response.id || item.id,
+    name: item.name,
+    safeName: item.safeName,
+    kind: item.kind,
+    type: item.type,
+    size: item.size,
+    url: item.publicUrl,
+    directUrl: item.directUrl,
+    date: Date.now(),
+    status: "completed",
+    demo: !!response.demo
+  };
+
+  addHistoryRecord(record);
+  state.lastResult = record;
+
+  showToast("success", "Upload complete", item.name + " is now available at a public link.");
+}
+
+function handleUploadError(item, err) {
+  item.status = "failed";
+  item.error = (err && err.message) ? err.message : "Upload failed";
+  updateItemEl(item);
+  paintItemProgress(item);
+  updateOverallProgress();
+  renderQueueToolbar();
+  playSound("error");
+  showToast("error", "Upload failed", item.name + " — " + item.error);
+}
+
+/* ================================================================
+   16. QUEUE RENDERING
+   ================================================================ */
+
+function buildQueueItemEl(item) {
+  const el = makeEl("div", "upload-item");
+  el.dataset.id = item.id;
+  el.dataset.status = item.status;
+
+  const iconWrap = makeEl("div", "ui-icon");
+  iconWrap.appendChild(iconEl(renderFileIcon(item.kind)));
+  el.appendChild(iconWrap);
+
+  const body = makeEl("div", "min-w-0 flex-1");
+
+  const head = makeEl("div", "flex items-start justify-between gap-3");
+
+  const textCol = makeEl("div", "min-w-0 flex-1");
+  const nameEl = makeEl("p", "ui-name");
+  nameEl.textContent = item.safeName;
+  nameEl.title = item.safeName;
+  nameEl.setAttribute("data-role", "name");
+  textCol.appendChild(nameEl);
+
+  const meta = makeEl("p", "ui-meta");
+  const metaText = makeEl("span");
+  metaText.textContent = (item.ext ? item.ext.toUpperCase() : (item.type || "FILE")) + " · " + formatBytes(item.size);
+  meta.appendChild(metaText);
+  meta.appendChild(makeEl("span", "opacity-50", "·"));
+  const statusSpan = makeEl("span", "ui-status");
+  statusSpan.setAttribute("data-role", "status");
+  statusSpan.setAttribute("data-s", item.status);
+  statusSpan.textContent = STATUS_TEXT[item.status] || item.status;
+  meta.appendChild(statusSpan);
+  textCol.appendChild(meta);
+
+  head.appendChild(textCol);
+
+  const actions = makeEl("div", "flex items-center gap-0.5 shrink-0");
+  actions.setAttribute("data-role", "actions");
+  head.appendChild(actions);
+
+  body.appendChild(head);
+
+  const progressWrap = makeEl("div", "ui-progress");
+  const bar = makeEl("div", "ui-bar");
+  bar.setAttribute("data-role", "bar");
+  bar.style.width = (item.progress || 0) + "%";
+  progressWrap.appendChild(bar);
+  body.appendChild(progressWrap);
+
+  const stats = makeEl("div", "ui-stats");
+  stats.setAttribute("data-role", "stats");
+  body.appendChild(stats);
+
+  el.appendChild(body);
+
+  return el;
+}
+
+function buildItemActions(item) {
+  const wrap = makeEl("div", "flex items-center gap-0.5");
+
+  if (ACTIVE_STATUSES.indexOf(item.status) > -1 || item.status === "queued") {
+    const cancelBtn = makeEl("button", "icon-btn danger");
+    cancelBtn.setAttribute("aria-label", "Cancel upload of " + item.safeName);
+    cancelBtn.setAttribute("title", "Cancel");
+    cancelBtn.appendChild(iconEl("x"));
+    cancelBtn.addEventListener("click", e => { e.stopPropagation(); cancelUpload(item.id); });
+    wrap.appendChild(cancelBtn);
+  }
+
+  if (item.status === "failed" || item.status === "cancelled") {
+    const retryBtn = makeEl("button", "icon-btn success");
+    retryBtn.setAttribute("aria-label", "Retry upload of " + item.safeName);
+    retryBtn.setAttribute("title", "Retry");
+    retryBtn.appendChild(iconEl("refresh-cw"));
+    retryBtn.addEventListener("click", e => { e.stopPropagation(); retryUpload(item.id); });
+    wrap.appendChild(retryBtn);
+  }
+
+  if (item.status === "completed") {
+    const openBtn = makeEl("button", "icon-btn");
+    openBtn.setAttribute("aria-label", "Open link for " + item.safeName);
+    openBtn.setAttribute("title", "Open link");
+    openBtn.appendChild(iconEl("external-link"));
+    openBtn.addEventListener("click", e => { e.stopPropagation(); openFile(item.publicUrl); });
+    wrap.appendChild(openBtn);
+
+    const copyBtn = makeEl("button", "icon-btn success");
+    copyBtn.setAttribute("aria-label", "Copy link for " + item.safeName);
+    copyBtn.setAttribute("title", "Copy link");
+    copyBtn.appendChild(iconEl("copy"));
+    copyBtn.addEventListener("click", e => { e.stopPropagation(); copyLink(item.publicUrl, item.name); });
+    wrap.appendChild(copyBtn);
+
+    const shareBtn = makeEl("button", "icon-btn");
+    shareBtn.setAttribute("aria-label", "Share " + item.safeName);
+    shareBtn.setAttribute("title", "Share");
+    shareBtn.appendChild(iconEl("share-2"));
+    shareBtn.addEventListener("click", e => { e.stopPropagation(); shareFile(item.publicUrl, item.name); });
+    wrap.appendChild(shareBtn);
+  }
+
+  const removeBtn = makeEl("button", "icon-btn danger");
+  removeBtn.setAttribute("aria-label", "Remove " + item.safeName + " from queue");
+  removeBtn.setAttribute("title", "Remove");
+  removeBtn.appendChild(iconEl("trash-2"));
+  removeBtn.addEventListener("click", e => { e.stopPropagation(); removeUpload(item.id); });
+  wrap.appendChild(removeBtn);
+
+  return wrap;
+}
+
+function updateItemEl(item) {
+  if (!item.el) return;
+
+  item.el.dataset.status = item.status;
+
+  const nameEl = item.el.querySelector('[data-role="name"]');
+  if (nameEl) nameEl.textContent = item.safeName;
+
+  const statusEl = item.el.querySelector('[data-role="status"]');
+  if (statusEl) {
+    statusEl.textContent = STATUS_TEXT[item.status] || item.status;
+    statusEl.setAttribute("data-s", item.status);
+  }
+
+  const actionsHost = item.el.querySelector('[data-role="actions"]');
+  if (actionsHost) {
+    actionsHost.innerHTML = "";
+    actionsHost.appendChild(buildItemActions(item));
+  }
+
+  const bar = item.el.querySelector('[data-role="bar"]');
+  if (bar) {
+    bar.classList.toggle("is-indeterminate", item.status === "processing");
+    if (item.status !== "processing") {
+      bar.style.width = (item.progress || 0) + "%";
+    }
+  }
+
+  paintItemProgress(item);
+  refreshIcons();
+}
+
+function renderQueue() {
+  const list = $("#fileList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  state.queue.forEach(item => {
+    const el = buildQueueItemEl(item);
+    item.el = el;
+    list.appendChild(el);
+    updateItemEl(item);
+  });
+
+  refreshIcons();
+  updateEmptyQueueState();
+}
+
+function updateEmptyQueueState() {
+  const empty = $("#queueEmpty");
+  if (!empty) return;
+  empty.classList.toggle("hidden", state.queue.length > 0);
+}
+
+function renderQueueToolbar() {
+  const toolbar = $("#queueToolbar");
+  const countEl = $("#queueCount");
+  const pluralEl = $("#queueCountPlural");
+  const uploadAllBtn = $("#uploadAllBtn");
+  const cancelAllBtn = $("#cancelAllBtn");
+  const clearAllBtn = $("#clearAllBtn");
+
+  if (!toolbar) return;
+
+  const has = state.queue.length > 0;
+  toolbar.classList.toggle("hidden", !has);
+
+  if (countEl) countEl.textContent = String(state.queue.length);
+  if (pluralEl) pluralEl.textContent = state.queue.length === 1 ? "" : "s";
+
+  const hasQueued = state.queue.some(i => i.status === "queued" || i.status === "failed");
+  const hasActive = state.queue.some(i => ACTIVE_STATUSES.indexOf(i.status) > -1);
+
+  if (uploadAllBtn) uploadAllBtn.classList.toggle("hidden", !hasQueued);
+  if (cancelAllBtn) cancelAllBtn.classList.toggle("hidden", !hasActive);
+  if (clearAllBtn) clearAllBtn.disabled = !has;
+
+  updateEmptyQueueState();
+}
+
+/* ================================================================
+   17. FILE INPUT / DROP / PASTE
+   ================================================================ */
+
+function handleFileSelect(input) {
+  let files = [];
+
+  if (!input) return;
+
+  if (input instanceof FileList || Array.isArray(input)) {
+    files = Array.prototype.slice.call(input);
+  } else if (input.files) {
+    files = Array.prototype.slice.call(input.files);
+  }
+
+  if (files.length === 0) return;
+  addFilesToQueue(files);
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const dz = $("#dropzone");
+  if (dz) dz.classList.remove("is-drag");
+
+  const dt = event.dataTransfer;
+  if (!dt) return;
+
+  const files = [];
+
+  if (dt.items && dt.items.length) {
+    for (let i = 0; i < dt.items.length; i++) {
+      const it = dt.items[i];
+      if (it.kind === "file") {
+        const f = it.getAsFile();
+        if (f) files.push(f);
+      }
+    }
+  } else if (dt.files) {
+    files = Array.prototype.slice.call(dt.files);
+  }
+
+  if (files.length === 0) {
+    showToast("warning", "Nothing dropped", "The dropped item did not contain any files.");
+    return;
+  }
+
+  handleFileSelect(files);
+}
+
+function handlePaste(event) {
+  const target = event.target;
+  if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+    return; // Do not interfere with normal text inputs
+  }
+
+  const cb = event.clipboardData;
+  if (!cb) return;
+
+  const files = [];
+
+  if (cb.items && cb.items.length) {
+    for (let i = 0; i < cb.items.length; i++) {
+      const it = cb.items[i];
+      if (it.kind === "file") {
+        const f = it.getAsFile();
+        if (f) files.push(f);
+      }
+    }
+  }
+
+  if (files.length === 0) return;
+
+  event.preventDefault();
+  handleFileSelect(files);
+  showToast("info", "Pasted from clipboard", files.length + " file(s) added to the queue.");
+}
+
+function addFilesToQueue(files) {
+  const result = validateFiles(files);
+
+  result.rejected.forEach(entry => {
+    const name = entry.file && entry.file.name ? sanitizeFilename(entry.file.name) : "Unnamed file";
+    entry.errors.forEach(msg => {
+      showToast("error", "Cannot add " + name, msg);
+    });
+    playSound("error");
+  });
+
+  if (result.accepted.length === 0) return;
+
+  const newItems = result.accepted.map(file => {
+    const ext = getExt(file.name);
+    const kind = getFileKind(file.type, ext);
+    return {
+      id: uid(),
+      file: file,
+      name: String(file.name || "file"),
+      safeName: sanitizeFilename(file.name),
+      ext: ext,
+      kind: kind,
+      type: String(file.type || ""),
+      size: file.size,
+      status: "queued",
+      progress: 0,
+      speed: 0,
+      loaded: 0,
+      total: file.size,
+      error: null,
+      cancelled: false,
+      el: null
+    };
+  });
+
+  state.queue = state.queue.concat(newItems);
+
+  // Append incrementally to avoid re-rendering everything
+  const list = $("#fileList");
+  if (list) {
+    newItems.forEach(item => {
+      const el = buildQueueItemEl(item);
+      item.el = el;
+      list.appendChild(el);
+      updateItemEl(item);
+    });
+    refreshIcons();
+  }
+
+  updateEmptyQueueState();
+  renderQueueToolbar();
+  updateOverallProgress();
+  playSound("click");
+
+  showToast("info", newItems.length + " file" + (newItems.length > 1 ? "s" : "") + " added",
+    "Total " + formatBytes(newItems.reduce((a, i) => a + i.size, 0)) + " queued.");
+
+  if (state.autoUpload) {
+    // Let the UI paint before starting
+    setTimeout(() => uploadFiles(newItems), 120);
+  }
+}
+
+/* ================================================================
+   18. LINK ACTIONS
+   ================================================================ */
+
+async function copyToClipboard(text) {
+  if (!text) return false;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (_) { /* fall through to legacy path */ }
+
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (_) {
+    return false;
+  }
+}
+
+async function copyLink(url, label) {
+  if (!url) { showToast("error", "Nothing to copy", "This file has no link yet."); return; }
+  const ok = await copyToClipboard(url);
+  if (ok) {
+    playSound("copy");
+    showToast("success", "Link copied", label ? label : url);
+  } else {
+    showToast("error", "Copy failed", "Please copy the link manually.");
+  }
+}
+
+function openFile(url) {
+  if (!url) { showToast("error", "No link available", "This file has no public URL yet."); return; }
+  window.open(url, "_blank", "noopener,noreferrer");
+  playSound("click");
+}
+
+async function downloadFile(url, filename) {
+  if (!url) { showToast("error", "Nothing to download", "This file has no link yet."); return; }
+
+  const safeName = sanitizeFilename(filename || "download");
+
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    if (!res.ok) throw new Error("Download failed");
+    const blob = await res.blob();
+    const objUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objUrl;
+    a.download = safeName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(objUrl), 8000);
+    showToast("success", "Download started", safeName);
+  } catch (_) {
+    // Cross-origin fallback: open in a new tab
+    window.open(url, "_blank", "noopener,noreferrer");
+    showToast("info", "Opened in new tab", "Your browser will handle the download.");
+  }
+}
+
+async function shareFile(url, title) {
+  if (!url) { showToast("error", "Nothing to share", "This file has no link yet."); return; }
+
+  const shareData = {
+    title: title ? title + " · " + CONFIG.APP_NAME : CONFIG.APP_NAME,
+    text: "Shared via " + CONFIG.APP_NAME,
+    url: url
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      playSound("click");
+      return;
+    } catch (err) {
+      if (err && err.name === "AbortError") return; // user cancelled
+      // fall through to modal
+    }
+  }
+
+  const input = $("#shareUrlInput");
+  if (input) input.value = url;
+  showModal("shareModal");
+}
+
+function shareToNetwork(network, url, title) {
+  const enc = encodeURIComponent;
+  const text = encodeURIComponent(title || "Check out this file");
+  let target = "";
+
+  switch (network) {
+    case "whatsapp": target = "https://wa.me/?text=" + enc((title ? title + " " : "") + url); break;
+    case "telegram": target = "https://t.me/share/url?url=" + enc(url) + "&text=" + text; break;
+    case "x":        target = "https://twitter.com/intent/tweet?url=" + enc(url) + "&text=" + text; break;
+    case "facebook": target = "https://www.facebook.com/sharer/sharer.php?u=" + enc(url); break;
+    default: return;
+  }
+
+  window.open(target, "_blank", "noopener,noreferrer,width=680,height=620");
+  playSound("click");
+}
+
+async function deleteFile(id, options) {
+  const opts = options || {};
+  const record = state.history.find(r => r.id === id);
+  if (!record) { showToast("error", "Not found", "This file is no longer in your history."); return; }
+
+  if (!opts.skipConfirm) {
+    const ok = await openConfirm(
+      "Delete this file?",
+      "\"" + record.name + "\" will be permanently removed. The public link will stop working.",
+      "Delete file"
+    );
+    if (!ok) return;
+  }
+
+  try {
+    if (record.demo) {
+      if (LocalStore.isAvailable()) {
+        try { await LocalStore.remove(record.id); } catch (_) { /* noop */ }
+      }
+      const objUrl = state.objectUrls.get(record.id);
+      if (objUrl) { URL.revokeObjectURL(objUrl); state.objectUrls.delete(record.id); }
+    } else {
+      const res = await fetch(API_CONFIG.DELETE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ id: record.id })
+      });
+
+      let payload = null;
+      try { payload = await res.json(); } catch (_) { payload = null; }
+
+      if (!res.ok || (payload && payload.success === false)) {
+        throw new Error((payload && payload.error) || ("Delete failed with status " + res.status));
+      }
+    }
+
+    state.history = state.history.filter(r => r.id !== id);
+    saveHistory();
+    renderHistory();
+    renderStats();
+    playSound("delete");
+    showToast("success", "File deleted", record.name + " has been removed.");
+
+    if (state.lastResult && state.lastResult.id === id) {
+      state.lastResult = null;
+      closeModal("resultModal");
+    }
+  } catch (err) {
+    showToast("error", "Delete failed", (err && err.message) || "Please try again.");
+    playSound("error");
+  }
+}
+
+/* ================================================================
+   19. RESULT MODAL
+   ================================================================ */
+
+function openResultModal(source) {
+  let record = null;
+
+  if (source && source.publicUrl) {
+    record = {
+      id: source.remoteId || source.id,
+      name: source.name,
+      safeName: source.safeName,
+      kind: source.kind,
+      type: source.type,
+      size: source.size,
+      url: source.publicUrl,
+      directUrl: source.directUrl,
+      date: Date.now(),
+      demo: state.demoMode
+    };
+  } else if (source && source.url) {
+    record = source;
+  }
+
+  if (!record) {
+    if (state.history.length === 0) { showToast("info", "No uploads yet", "Upload a file to see its link here."); return; }
+    record = state.history[0];
+  }
+
+  state.lastResult = record;
+
+  const iconHost = $("#resultIcon");
+  if (iconHost) {
+    iconHost.innerHTML = "";
+    iconHost.appendChild(iconEl(renderFileIcon(record.kind || getFileKind(record.type, getExt(record.name)))));
+  }
+
+  $("#resultName").textContent = record.name;
+  $("#resultMeta").textContent =
+    ((getExt(record.name) || record.type || "file").toUpperCase()) + " · " + formatBytes(record.size) + " · " + timeAgo(record.date);
+
+  $("#resultPublicUrl").value = record.url || "";
+  $("#resultDirectUrl").value = record.directUrl || "";
+
+  $("#resultCopyBtn").onclick = () => copyLink(record.url, record.name);
+  $("#resultOpenBtn").onclick = () => openFile(record.url);
+  $("#resultShareBtn").onclick = () => shareFile(record.url, record.name);
+  $("#resultDownloadBtn").onclick = () => downloadFile(record.directUrl || record.url, record.name);
+  $("#resultQrBtn").onclick = () => openQrModal(record.url, record.name);
+  $("#resultDeleteBtn").onclick = () => deleteFile(record.id);
+  $("#resultPreviewBtn").onclick = () => {
+    closeModal("resultModal");
+    setTimeout(() => openPreview(record), 260);
+  };
+
+  refreshIcons();
+  showModal("resultModal");
+}
+
+/* ================================================================
+   20. PREVIEW
+   ================================================================ */
+
+function resolvePreviewUrl(record) {
+  if (record.demo && state.objectUrls.has(record.id)) return state.objectUrls.get(record.id);
+  return record.directUrl || record.url || "";
+}
+
+function renderPreview(record) {
+  const body = $("#previewBody");
+  const footer = $("#previewFooter");
+  const title = $("#previewTitle");
+
+  if (!body) return;
+
+  body.innerHTML = "";
+  footer.innerHTML = "";
+  if (title) title.textContent = record.name;
+
+  const url = resolvePreviewUrl(record);
+  const kind = record.kind || getFileKind(record.type, getExt(record.name));
+
+  const stage = makeEl("div", "preview-stage flex items-center justify-center");
+  stage.style.minHeight = "280px";
+  stage.style.padding = "1rem";
+
+  if (kind === "image") {
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = record.name;
+    img.loading = "lazy";
+    img.style.maxWidth = "100%";
+    img.style.maxHeight = "62vh";
+    img.style.objectFit = "contain";
+    img.style.borderRadius = ".75rem";
+    img.style.cursor = "zoom-in";
+    img.style.transition = "transform .25s ease";
+    img.style.transformOrigin = "center center";
+
+    let zoomed = false;
+    img.addEventListener("click", () => {
+      zoomed = !zoomed;
+      img.style.transform = zoomed ? "scale(1.6)" : "scale(1)";
+      img.style.cursor = zoomed ? "zoom-out" : "zoom-in";
+    });
+    img.addEventListener("load", () => {
+      const dim = document.createElement("span");
+      dim.textContent = img.naturalWidth + " × " + img.naturalHeight + " px";
+      footer.appendChild(dim);
+      footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+      footer.appendChild(makeEl("span", "", (record.type || getExt(record.name) || "image").toUpperCase()));
+    });
+    img.addEventListener("error", () => {
+      stage.innerHTML = "";
+      stage.appendChild(buildUnavailableNotice("Preview unavailable for this image."));
+    });
+
+    stage.appendChild(img);
+  } else if (kind === "video") {
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
+    video.preload = "metadata";
+    video.playsInline = true;
+    video.style.maxWidth = "100%";
+    video.style.maxHeight = "62vh";
+    video.style.borderRadius = ".75rem";
+    video.style.background = "#000";
+
+    video.addEventListener("loadedmetadata", () => {
+      if (isFinite(video.duration) && video.duration > 0) {
+        footer.appendChild(makeEl("span", "", "Duration " + formatDuration(video.duration)));
+      }
+      footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+      footer.appendChild(makeEl("span", "", (record.type || "video").toUpperCase()));
+      if (video.videoWidth) {
+        footer.appendChild(makeEl("span", "", video.videoWidth + " × " + video.videoHeight + " px"));
+      }
+    });
+    video.addEventListener("error", () => {
+      stage.innerHTML = "";
+      stage.appendChild(buildUnavailableNotice("This video format cannot be previewed in your browser. Download it instead."));
+    });
+
+    stage.appendChild(video);
+  } else if (kind === "audio") {
+    const wrap = makeEl("div", "w-full max-w-lg text-center");
+    const iconBubble = makeEl("div", "mx-auto grid h-20 w-20 place-items-center rounded-2xl");
+    iconBubble.style.background = "var(--brand-soft)";
+    iconBubble.style.color = "var(--brand)";
+    iconBubble.appendChild(iconEl("music", "w-9 h-9"));
+    wrap.appendChild(iconBubble);
+
+    const audio = document.createElement("audio");
+    audio.src = url;
+    audio.controls = true;
+    audio.preload = "metadata";
+    audio.style.width = "100%";
+    audio.style.marginTop = "1.25rem";
+
+    audio.addEventListener("loadedmetadata", () => {
+      if (isFinite(audio.duration) && audio.duration > 0) {
+        footer.appendChild(makeEl("span", "", "Duration " + formatDuration(audio.duration)));
+      }
+      footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+      footer.appendChild(makeEl("span", "", (record.type || "audio").toUpperCase()));
+    });
+
+    wrap.appendChild(audio);
+    stage.appendChild(wrap);
+  } else if (kind === "document" && (String(record.type).indexOf("pdf") > -1 || getExt(record.name) === "pdf")) {
+    const iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.title = record.name;
+    iframe.style.width = "100%";
+    iframe.style.height = "62vh";
+    iframe.style.border = "0";
+    iframe.style.borderRadius = ".75rem";
+    iframe.style.background = "#fff";
+    stage.style.padding = "0";
+    stage.appendChild(iframe);
+    footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+    footer.appendChild(makeEl("span", "", "PDF"));
+  } else if (kind === "document" && (String(record.type).indexOf("text") > -1 || getExt(record.name) === "txt")) {
+    const pre = makeEl("pre", "text-xs whitespace-pre-wrap break-words w-full max-w-3xl");
+    pre.style.color = "var(--text)";
+    pre.style.maxHeight = "60vh";
+    pre.style.overflow = "auto";
+    pre.style.padding = "1rem";
+    pre.style.borderRadius = ".75rem";
+    pre.style.background = "var(--surface)";
+    pre.textContent = "Loading…";
+    stage.appendChild(pre);
+
+    fetch(url)
+      .then(r => r.text())
+      .then(text => { pre.textContent = text.slice(0, 60000) + (text.length > 60000 ? "\n\n… (truncated)" : ""); })
+      .catch(() => { pre.textContent = "Unable to load this text file."; });
+
+    footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+  } else {
+    const box = makeEl("div", "text-center px-6 py-8");
+    const bubble = makeEl("div", "mx-auto grid h-20 w-20 place-items-center rounded-2xl");
+    bubble.style.background = "var(--brand-soft)";
+    bubble.style.color = "var(--brand)";
+    bubble.appendChild(iconEl(renderFileIcon(kind), "w-9 h-9"));
+    box.appendChild(bubble);
+    box.appendChild(makeEl("p", "mt-4 font-display text-base font-bold", record.name));
+    box.appendChild(makeEl("p", "mt-1 text-xs text-muted",
+      ((getExt(record.name) || record.type || "file").toUpperCase()) + " · " + formatBytes(record.size)));
+    box.appendChild(makeEl("p", "mt-3 text-xs text-muted max-w-sm mx-auto",
+      "No inline preview is available for this file type. Use the download button to save it."));
+    stage.appendChild(box);
+
+    footer.appendChild(makeEl("span", "", formatBytes(record.size)));
+    footer.appendChild(makeEl("span", "", (record.type || "unknown").toUpperCase()));
+  }
+
+  body.appendChild(stage);
+
+  footer.appendChild(makeEl("span", "", "Uploaded " + timeAgo(record.date)));
+  if (record.demo) {
+    const demoTag = makeEl("span", "inline-flex items-center gap-1", "Local demo copy");
+    footer.appendChild(demoTag);
+  }
+
+  const openBtn = $("#previewOpenBtn");
+  const dlBtn = $("#previewDownloadBtn");
+  if (openBtn) openBtn.onclick = () => openFile(record.url || url);
+  if (dlBtn) dlBtn.onclick = () => downloadFile(url, record.name);
+
+  refreshIcons();
+}
+
+function buildUnavailableNotice(message) {
+  const box = makeEl("div", "text-center px-6 py-8");
+  const bubble = makeEl("div", "mx-auto grid h-16 w-16 place-items-center rounded-2xl");
+  bubble.style.background = "var(--surface-2)";
+  bubble.style.color = "var(--muted)";
+  bubble.appendChild(iconEl("alert-circle", "w-7 h-7"));
+  box.appendChild(bubble);
+  box.appendChild(makeEl("p", "mt-4 text-sm text-muted max-w-sm mx-auto", message));
+  return box;
+}
+
+function formatDuration(seconds) {
+  const s = Math.max(0, Math.floor(seconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  if (h > 0) return h + ":" + String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+  return m + ":" + String(sec).padStart(2, "0");
+}
+
+function openPreview(record) {
+  if (!record) return;
+  renderPreview(record);
+  showModal("previewModal");
+}
+
+/* ================================================================
+   21. QR CODE
+   ================================================================ */
+
+let currentQrUrl = "";
+
+function openQrModal(url, label) {
+  if (!url) { showToast("error", "Nothing to encode", "This file has no link yet."); return; }
+
+  currentQrUrl = url;
+  const caption = $("#qrCaption");
+  if (caption) caption.textContent = url;
+
+  const canvas = $("#qrCanvas");
+
+  if (window.QRCode && typeof window.QRCode.toCanvas === "function" && canvas) {
+    window.QRCode.toCanvas(canvas, url, {
+      width: 240,
+      margin: 1,
+      color: { dark: "#0f172a", light: "#ffffff" },
+      errorCorrectionLevel: "M"
+    }, function (err) {
+      if (err) renderQrFallback(canvas, url);
+    });
+  } else if (canvas) {
+    renderQrFallback(canvas, url);
+  }
+
+  showModal("qrModal");
+}
+
+function renderQrFallback(canvas, url) {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  canvas.width = 240;
+  canvas.height = 240;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, 240, 240);
+  ctx.fillStyle = "#0f172a";
+  ctx.font = "12px Inter, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("QR unavailable offline", 120, 110);
+  ctx.fillText("Copy the link instead", 120, 130);
+}
+
+function downloadQr() {
+  const canvas = $("#qrCanvas");
+  if (!canvas) return;
+  try {
+    const dataUrl = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "arunalink-qr.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast("success", "QR saved", "arunalink-qr.png");
+  } catch (_) {
+    showToast("error", "Could not save QR", "Try taking a screenshot instead.");
+  }
+}
+
+/* ================================================================
+   22. HISTORY RENDERING
+   ================================================================ */
+
+function searchFiles(query) {
+  state.search = String(query || "").trim().toLowerCase();
+  renderHistory();
+}
+
+function filterFiles(filter) {
+  state.filter = filter || "all";
+  $$(".filter-pill").forEach(p => p.classList.toggle("active", p.dataset.filter === state.filter));
+  const select = $("#filterSelect");
+  if (select && select.value !== state.filter) select.value = state.filter;
+  renderHistory();
+}
+
+function sortFiles(sort) {
+  state.sort = sort || "newest";
+  const select = $("#sortSelect");
+  if (select && select.value !== state.sort) select.value = state.sort;
+  renderHistory();
+}
+
+function getVisibleHistory() {
+  let list = state.history.slice();
+
+  if (state.filter !== "all") {
+    list = list.filter(r => {
+      const kind = r.kind || getFileKind(r.type, getExt(r.name));
+      if (state.filter === "document") return kind === "document" || kind === "code";
+      return kind === state.filter;
+    });
+  }
+
+  if (state.search) {
+    const q = state.search;
+    list = list.filter(r => String(r.name || "").toLowerCase().indexOf(q) > -1);
+  }
+
+  switch (state.sort) {
+    case "oldest":    list.sort((a, b) => a.date - b.date); break;
+    case "name-asc":  list.sort((a, b) => String(a.name).localeCompare(String(b.name))); break;
+    case "name-desc": list.sort((a, b) => String(b.name).localeCompare(String(a.name))); break;
+    case "size-desc": list.sort((a, b) => b.size - a.size); break;
+    case "size-asc":  list.sort((a, b) => a.size - b.size); break;
+    default:          list.sort((a, b) => b.date - a.date); break;
+  }
+
+  return list;
+}
+
+function renderUploadHistory() { renderHistory(); }
+
+function renderHistory() {
+  const list = $("#historyList");
+  const empty = $("#historyEmpty");
+  const countLabel = $("#historyCountLabel");
+  if (!list) return;
+
+  const visible = getVisibleHistory();
+
+  list.innerHTML = "";
+
+  if (countLabel) {
+    countLabel.textContent = state.history.length === 0
+      ? ""
+      : visible.length + " of " + state.history.length + " shown";
+  }
+
+  if (state.history.length === 0) {
+    if (empty) empty.classList.remove("hidden");
+    list.classList.add("hidden");
+    return;
+  }
+
+  list.classList.remove("hidden");
+  if (empty) empty.classList.add("hidden");
+
+  if (visible.length === 0) {
+    const noResult = makeEl("div", "surface rounded-2xl py-12 px-6 text-center sm:col-span-2 lg:col-span-3");
+    const bubble = makeEl("div", "mx-auto grid h-12 w-12 place-items-center rounded-xl");
+    bubble.style.background = "var(--surface-2)";
+    bubble.style.color = "var(--muted)";
+    bubble.appendChild(iconEl("search-x", "w-6 h-6"));
+    noResult.appendChild(bubble);
+    noResult.appendChild(makeEl("p", "mt-3 text-sm font-semibold", "No matching files"));
+    noResult.appendChild(makeEl("p", "mt-1 text-xs text-muted", "Try a different search term or filter."));
+    list.appendChild(noResult);
+    refreshIcons();
+    return;
+  }
+
+  visible.forEach((record, index) => {
+    list.appendChild(buildHistoryCard(record, index));
+  });
+
+  refreshIcons();
+}
+
+function buildHistoryCard(record, index) {
+  const card = makeEl("div", "hist-card");
+  card.style.animationDelay = Math.min(index * 35, 350) + "ms";
+
+  const kind = record.kind || getFileKind(record.type, getExt(record.name));
+
+  const thumb = makeEl("div", "hist-thumb");
+
+  if (kind === "image") {
+    const url = resolvePreviewUrl(record);
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = record.name;
+    img.loading = "lazy";
+    img.addEventListener("error", () => {
+      thumb.innerHTML = "";
+      thumb.appendChild(iconEl(renderFileIcon(kind)));
+      refreshIcons();
+    });
+    thumb.appendChild(img);
+  } else {
+    thumb.appendChild(iconEl(renderFileIcon(kind)));
+  }
+
+  card.appendChild(thumb);
+
+  const body = makeEl("div", "min-w-0 flex-1");
+
+  const nameEl = makeEl("p", "text-sm font-semibold truncate");
+  nameEl.textContent = record.name;
+  nameEl.title = record.name;
+  body.appendChild(nameEl);
+
+  const metaEl = makeEl("p", "text-[11px] text-muted truncate mt-0.5");
+  metaEl.textContent = formatBytes(record.size) + " · Uploaded " + timeAgo(record.date) +
+    (record.demo ? " · local" : "");
+  body.appendChild(metaEl);
+
+  card.appendChild(body);
+
+  const actions = makeEl("div", "flex items-center gap-0.5 shrink-0");
+
+  const previewBtn = makeEl("button", "icon-btn");
+  previewBtn.setAttribute("aria-label", "Preview " + record.name);
+  previewBtn.setAttribute("title", "Preview");
+  previewBtn.appendChild(iconEl("eye"));
+  previewBtn.addEventListener("click", () => openPreview(record));
+  actions.appendChild(previewBtn);
+
+  const openBtn = makeEl("button", "icon-btn");
+  openBtn.setAttribute("aria-label", "Open link for " + record.name);
+  openBtn.setAttribute("title", "Open");
+  openBtn.appendChild(iconEl("external-link"));
+  openBtn.addEventListener("click", () => openFile(record.url));
+  actions.appendChild(openBtn);
+
+  const copyBtn = makeEl("button", "icon-btn success");
+  copyBtn.setAttribute("aria-label", "Copy link for " + record.name);
+  copyBtn.setAttribute("title", "Copy link");
+  copyBtn.appendChild(iconEl("copy"));
+  copyBtn.addEventListener("click", () => copyLink(record.url, record.name));
+  actions.appendChild(copyBtn);
+
+  const shareBtn = makeEl("button", "icon-btn");
+  shareBtn.setAttribute("aria-label", "Share " + record.name);
+  shareBtn.setAttribute("title", "Share");
+  shareBtn.appendChild(iconEl("share-2"));
+  shareBtn.addEventListener("click", () => shareFile(record.url, record.name));
+  actions.appendChild(shareBtn);
+
+  const delBtn = makeEl("button", "icon-btn danger");
+  delBtn.setAttribute("aria-label", "Delete " + record.name);
+  delBtn.setAttribute("title", "Delete");
+  delBtn.appendChild(iconEl("trash-2"));
+  delBtn.addEventListener("click", () => deleteFile(record.id));
+  actions.appendChild(delBtn);
+
+  card.appendChild(actions);
+
+  return card;
+}
+
+async function clearHistory() {
+  if (state.history.length === 0) {
+    showToast("info", "History is empty", "There is nothing to clear.");
+    return;
+  }
+
+  const ok = await openConfirm(
+    "Clear all history?",
+    "This removes " + state.history.length + " record(s) from your local history. Files stored in local demo mode will also be deleted from this browser.",
+    "Clear everything"
+  );
+  if (!ok) return;
+
+  // Remove demo blobs
+  for (const record of state.history) {
+    if (record.demo && LocalStore.isAvailable()) {
+      try { await LocalStore.remove(record.id); } catch (_) { /* noop */ }
+    }
+    const objUrl = state.objectUrls.get(record.id);
+    if (objUrl) { URL.revokeObjectURL(objUrl); state.objectUrls.delete(record.id); }
+  }
+
+  state.history = [];
+  saveHistory();
+  renderHistory();
+  renderStats();
+  playSound("delete");
+  showToast("success", "History cleared", "All local records have been removed.");
+}
+
+/* ================================================================
+   23. STATS
+   ================================================================ */
+
+function computeStats() {
+  const stats = {
+    uploads: state.history.length,
+    files: state.history.length,
+    storage: state.history.reduce((acc, r) => acc + (Number(r.size) || 0), 0),
+    images: 0,
+    videos: 0,
+    documents: 0
+  };
+
+  state.history.forEach(r => {
+    const kind = r.kind || getFileKind(r.type, getExt(r.name));
+    if (kind === "image") stats.images++;
+    else if (kind === "video") stats.videos++;
+    else if (kind === "document" || kind === "code") stats.documents++;
+  });
+
+  return stats;
+}
+
+function animateNumber(el, from, to, formatter) {
+  if (!el) return;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || from === to) {
+    el.textContent = formatter(to);
+    return;
+  }
+
+  const duration = 700;
+  const start = performance.now();
+
+  el.classList.add("anim-glow");
+
+  function frame(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const value = from + (to - from) * eased;
+    el.textContent = formatter(value);
+    if (t < 1) requestAnimationFrame(frame);
+    else setTimeout(() => el.classList.remove("anim-glow"), 400);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+function renderStats() {
+  const stats = computeStats();
+
+  const els = {
+    uploads: $('[data-stat="uploads"]'),
+    files: $('[data-stat="files"]'),
+    storage: $('[data-stat="storage"]'),
+    images: $('[data-stat="images"]'),
+    videos: $('[data-stat="videos"]'),
+    documents: $('[data-stat="documents"]')
+  };
+
+  if (els.uploads) animateNumber(els.uploads, Number(els.uploads.dataset.prev || 0), stats.uploads, v => Math.round(v).toString());
+  if (els.files) animateNumber(els.files, Number(els.files.dataset.prev || 0), stats.files, v => Math.round(v).toString());
+  if (els.storage) animateNumber(els.storage, 0, stats.storage, v => formatBytes(v));
+  if (els.images) animateNumber(els.images, Number(els.images.dataset.prev || 0), stats.images, v => Math.round(v).toString());
+  if (els.videos) animateNumber(els.videos, Number(els.videos.dataset.prev || 0), stats.videos, v => Math.round(v).toString());
+  if (els.documents) animateNumber(els.documents, Number(els.documents.dataset.prev || 0), stats.documents, v => Math.round(v).toString());
+
+  Object.keys(els).forEach(k => {
+    if (els[k]) els[k].dataset.prev = String(stats[k] === undefined ? 0 : Math.round(stats[k]));
+  });
+}
+
+/* ================================================================
+   24. ONLINE / OFFLINE
+   ================================================================ */
+
+function updateOnlineState() {
+  const banner = $("#offlineBanner");
+  if (!banner) return;
+  const offline = !navigator.onLine;
+  banner.classList.toggle("hidden", !offline);
+  if (offline) {
+    showToast("warning", "You are offline", "Uploads will fail until the connection returns.");
+  }
+}
+
+/* ================================================================
+   25. EVENT WIRING
+   ================================================================ */
+
+function wireEvents() {
+  /* ---- Dropzone ---- */
+  const dropzone = $("#dropzone");
+  const fileInput = $("#fileInput");
+  const browseBtn = $("#browseBtn");
+  const pasteBtn = $("#pasteBtn");
+
+  if (fileInput) {
+    if (CONFIG.ALLOWED_TYPES.length > 0) fileInput.accept = CONFIG.ALLOWED_TYPES.join(",");
+    fileInput.addEventListener("change", function () {
+      handleFileSelect(fileInput.files);
+      fileInput.value = "";
+    });
+  }
+
+  if (browseBtn) {
+    browseBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      playSound("click");
+      if (fileInput) fileInput.click();
+    });
+  }
+
+  if (dropzone) {
+    dropzone.addEventListener("click", e => {
+      if (e.target.closest("button")) return;
+      if (fileInput) fileInput.click();
+    });
+
+    dropzone.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (fileInput) fileInput.click();
+      }
+    });
+
+    let dragDepth = 0;
+
+    ["dragenter", "dragover"].forEach(evt => {
+      dropzone.addEventListener(evt, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dragDepth++;
+        dropzone.classList.add("is-drag");
+        if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
+      });
+    });
+
+    dropzone.addEventListener("dragleave", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dragDepth = Math.max(0, dragDepth - 1);
+      if (dragDepth === 0) dropzone.classList.remove("is-drag");
+    });
+
+    dropzone.addEventListener("drop", e => {
+      dragDepth = 0;
+      handleDrop(e);
+    });
+  }
+
+  // Prevent the browser from opening dropped files outside the dropzone
+  ["dragover", "drop"].forEach(evt => {
+    window.addEventListener(evt, e => {
+      if (dropzone && dropzone.contains(e.target)) return;
+      e.preventDefault();
+    });
+  });
+
+  if (pasteBtn) {
+    pasteBtn.addEventListener("click", async e => {
+      e.stopPropagation();
+      playSound("click");
+
+      if (navigator.clipboard && navigator.clipboard.read) {
+        try {
+          const items = await navigator.clipboard.read();
+          const files = [];
+          for (const item of items) {
+            for (const type of item.types) {
+              if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
+                const blob = await item.getType(type);
+                const ext = type.split("/")[1].split("+")[0];
+                files.push(new File([blob], "clipboard-" + Date.now() + "." + ext, { type: type }));
+              }
+            }
+          }
+          if (files.length > 0) {
+            handleFileSelect(files);
+            return;
+          }
+          showToast("info", "Clipboard is empty", "Copy an image or file first, then try again.");
+          return;
+        } catch (_) {
+          // Permission denied or unsupported — fall through
+        }
+      }
+
+      showToast("info", "Use Ctrl + V", "Your browser blocked clipboard access. Press Ctrl + V to paste files.");
+    });
+  }
+
+  /* ---- Queue toolbar ---- */
+  const uploadAllBtn = $("#uploadAllBtn");
+  const cancelAllBtn = $("#cancelAllBtn");
+  const clearAllBtn = $("#clearAllBtn");
+  const autoUploadToggle = $("#autoUploadToggle");
+
+  if (uploadAllBtn) {
+    uploadAllBtn.addEventListener("click", () => {
+      playSound("click");
+      uploadFiles();
+    });
+  }
+
+  if (cancelAllBtn) {
+    cancelAllBtn.addEventListener("click", () => {
+      playSound("click");
+      cancelAllUploads();
+    });
+  }
+
+  if (clearAllBtn) {
+    clearAllBtn.addEventListener("click", () => {
+      if (state.queue.length === 0) return;
+      clearAllUploads();
+    });
+  }
+
+  if (autoUploadToggle) {
+    autoUploadToggle.checked = state.autoUpload;
+    updateAutoUploadSwitch();
+    autoUploadToggle.addEventListener("change", function () {
+      state.autoUpload = autoUploadToggle.checked;
+      try { localStorage.setItem(CONFIG.STORAGE_KEYS.AUTOUPLOAD, state.autoUpload ? "on" : "off"); } catch (_) {}
+      updateAutoUploadSwitch();
+      playSound("click");
+      if (state.autoUpload) {
+        const queued = state.queue.filter(i => i.status === "queued");
+        if (queued.length > 0) uploadFiles(queued);
+      }
+      renderQueueToolbar();
+    });
+  }
+
+  /* ---- Theme / sound / mobile menu ---- */
+  const themeToggle = $("#themeToggle");
+  const mobileThemeBtn = $("#mobileThemeBtn");
+  const soundToggle = $("#soundToggle");
+
+  if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
+  if (mobileThemeBtn) mobileThemeBtn.addEventListener("click", toggleTheme);
+  if (soundToggle) soundToggle.addEventListener("click", toggleSound);
+
+  const mobileMenuBtn = $("#mobileMenuBtn");
+  const mobileMenu = $("#mobileMenu");
+
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener("click", () => {
+      const open = mobileMenu.classList.toggle("hidden") === false;
+      mobileMenuBtn.setAttribute("aria-expanded", String(open));
+      mobileMenuBtn.innerHTML = "";
+      mobileMenuBtn.appendChild(iconEl(open ? "x" : "menu"));
+      refreshIcons();
+      playSound("click");
+    });
+
+    $$(".mobile-menu-link").forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+        mobileMenuBtn.setAttribute("aria-expanded", "false");
+        mobileMenuBtn.innerHTML = "";
+        mobileMenuBtn.appendChild(iconEl("menu"));
+        refreshIcons();
+      });
+    });
+  }
+
+  /* ---- Search / filter / sort ---- */
+  const searchInput = $("#searchInput");
+  if (searchInput) {
+    let debounce = null;
+    searchInput.addEventListener("input", function () {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => searchFiles(searchInput.value), 180);
+    });
+  }
+
+  const filterSelect = $("#filterSelect");
+  if (filterSelect) {
+    filterSelect.addEventListener("change", () => filterFiles(filterSelect.value));
+  }
+
+  const sortSelect = $("#sortSelect");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => sortFiles(sortSelect.value));
+  }
+
+  $$(".filter-pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      filterFiles(pill.dataset.filter || "all");
+      playSound("click");
+    });
+  });
+
+  const clearHistoryBtn = $("#clearHistoryBtn");
+  const clearHistoryBtnTop = $("#clearHistoryBtnTop");
+  if (clearHistoryBtn) clearHistoryBtn.addEventListener("click", clearHistory);
+  if (clearHistoryBtnTop) clearHistoryBtnTop.addEventListener("click", clearHistory);
+
+  /* ---- Modal close buttons ---- */
+  document.addEventListener("click", e => {
+    const closeBtn = e.target.closest("[data-close-modal]");
+    if (closeBtn) {
+      const modal = closeBtn.closest(".modal-backdrop");
+      if (modal) closeModal(modal.id);
+      return;
+    }
+
+    if (e.target.classList && e.target.classList.contains("modal-backdrop")) {
+      closeModal(e.target.id);
+    }
+  });
+
+  /* ---- Copy buttons with data-copy-target ---- */
+  document.addEventListener("click", async e => {
+    const btn = e.target.closest("[data-copy-target]");
+    if (!btn) return;
+    const targetId = btn.getAttribute("data-copy-target");
+    const input = document.getElementById(targetId);
+    if (!input) return;
+    await copyLink(input.value, "");
+  });
+
+  /* ---- Share buttons ---- */
+  $$("[data-share]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const network = btn.getAttribute("data-share");
+      const url = $("#shareUrlInput") ? $("#shareUrlInput").value : "";
+      const title = state.lastResult ? state.lastResult.name : CONFIG.APP_NAME;
+      if (url) shareToNetwork(network, url, title);
+    });
+  });
+
+  const nativeShareBtn = $("#nativeShareBtn");
+  if (nativeShareBtn) {
+    nativeShareBtn.addEventListener("click", async () => {
+      const url = $("#shareUrlInput") ? $("#shareUrlInput").value : "";
+      if (!url) return;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: CONFIG.APP_NAME, url: url });
+          closeModal("shareModal");
+        } catch (_) { /* cancelled */ }
+      } else {
+        await copyLink(url, "");
+        closeModal("shareModal");
+      }
+    });
+  }
+
+  /* ---- QR ---- */
+  const qrDownloadBtn = $("#qrDownloadBtn");
+  const qrCopyBtn = $("#qrCopyBtn");
+  if (qrDownloadBtn) qrDownloadBtn.addEventListener("click", downloadQr);
+  if (qrCopyBtn) qrCopyBtn.addEventListener("click", () => copyLink(currentQrUrl, ""));
+
+  /* ---- Confirm dialog ---- */
+  const confirmOkBtn = $("#confirmOkBtn");
+  const confirmCancelBtn = $("#confirmCancelBtn");
+  if (confirmOkBtn) confirmOkBtn.addEventListener("click", () => resolveConfirm(true));
+  if (confirmCancelBtn) confirmCancelBtn.addEventListener("click", () => resolveConfirm(false));
+
+  /* ---- Offline retry ---- */
+  const retryConnectionBtn = $("#retryConnectionBtn");
+  if (retryConnectionBtn) {
+    retryConnectionBtn.addEventListener("click", async () => {
+      updateOnlineState();
+      if (navigator.onLine) {
+        showToast("info", "Rechecking backend…", "Please wait.");
+        await checkBackend();
+        showToast(state.demoMode ? "warning" : "success",
+          state.demoMode ? "Backend unavailable" : "Connected",
+          state.demoMode ? "Running in local demo mode." : "Upload API is reachable.");
+      }
+    });
+  }
+
+  /* ---- Keyboard shortcuts ---- */
+  document.addEventListener("keydown", e => {
+    // Escape closes the topmost modal
+    if (e.key === "Escape" && modalStack.length > 0) {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+
+    const target = e.target;
+    const inField = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+
+    // Ctrl/Cmd + K -> focus search
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      const searchInput = $("#searchInput");
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+      return;
+    }
+
+    // Ctrl/Cmd + V -> paste upload (only outside text fields)
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "v" && !inField) {
+      // The native paste event handles the actual file extraction.
+      return;
+    }
+  });
+
+  document.addEventListener("paste", handlePaste);
+
+  /* ---- Scroll reveal ---- */
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+    $$(".reveal").forEach(el => observer.observe(el));
+  } else {
+    $$(".reveal").forEach(el => el.classList.add("in"));
+  }
+
+  /* ---- Online / offline ---- */
+  window.addEventListener("online", () => {
+    updateOnlineState();
+    showToast("success", "Back online", "You can upload again.");
+  });
+  window.addEventListener("offline", updateOnlineState);
+
+  /* ---- Theme system change ---- */
+  if (window.matchMedia) {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = () => { if (state.theme === "system") applyTheme(); };
+    if (mq.addEventListener) mq.addEventListener("change", handler);
+    else if (mq.addListener) mq.addListener(handler);
+  }
+
+  /* ---- Refresh relative timestamps periodically ---- */
+  setInterval(() => {
+    if (document.hidden) return;
+    if (state.history.length > 0) renderHistory();
+  }, 60000);
+
+  /* ---- Recreate icons after fonts load (avoids layout shift) ---- */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(refreshIcons).catch(() => {});
+  }
+}
+
+function updateAutoUploadSwitch() {
+  const toggle = $("#autoUploadToggle");
+  if (!toggle) return;
+  const track = toggle.parentElement.querySelector("[data-track]");
+  const thumb = toggle.parentElement.querySelector("[data-thumb]");
+  if (!track || !thumb) return;
+
+  const on = state.autoUpload;
+  track.style.background = on ? "linear-gradient(100deg,#6366f1,#8b5cf6)" : "var(--surface-3)";
+  thumb.style.transform = on ? "translateX(16px)" : "translateX(0)";
+}
+
+/* ================================================================
+   26. INITIALIZATION
+   ================================================================ */
+
+function applyStaticConfig() {
+  const maxSizeText = formatBytes(CONFIG.MAX_FILE_SIZE);
+  const hm = $("#heroMaxSize");
+  const hintMax = $("#hintMaxSize");
+  const hintFiles = $("#hintMaxFiles");
+
+  if (hm) hm.textContent = maxSizeText;
+  if (hintMax) hintMax.textContent = maxSizeText;
+  if (hintFiles) hintFiles.textContent = String(CONFIG.MAX_FILES);
+
+  const yearEl = $("#year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  const dropzoneHint = $("#dropzoneHint");
+  if (dropzoneHint) {
+    dropzoneHint.innerHTML = "";
+    dropzoneHint.appendChild(document.createTextNode("Max "));
+    const s1 = makeEl("span", "", maxSizeText);
+    dropzoneHint.appendChild(s1);
+    dropzoneHint.appendChild(document.createTextNode(" per file · up to "));
+    const s2 = makeEl("span", "", String(CONFIG.MAX_FILES));
+    dropzoneHint.appendChild(s2);
+    dropzoneHint.appendChild(document.createTextNode(" files at once"));
+  }
+}
+
+function loadPrefs() {
+  try {
+    const au = localStorage.getItem(CONFIG.STORAGE_KEYS.AUTOUPLOAD);
+    if (au === "off") state.autoUpload = false;
+    if (au === "on") state.autoUpload = true;
+  } catch (_) { /* noop */ }
+}
+
+async function init() {
+  applyStaticConfig();
+  loadTheme();
+  loadSoundPref();
+  loadPrefs();
+
+  state.history = loadHistory();
+
+  applyTheme();
+  updateSoundButton();
+  updateOnlineState();
+
+  renderQueue();
+  renderQueueToolbar();
+  renderHistory();
+  renderStats();
+  updateEmptyQueueState();
+
+  wireEvents();
+
+  refreshIcons();
+
+  // Hydrate local demo blob URLs (restores previews after a reload)
+  await hydrateDemoUrls();
+
+  // Detect backend availability
+  await checkBackend();
+
+  if (state.demoMode && CONFIG.DEMO_FALLBACK) {
+    setTimeout(() => {
+      showToast("info", "Local demo mode active",
+        "No upload API detected. Files are stored in this browser only. Deploy the /api endpoints for public hosting.",
+        7000);
+    }, 900);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+/* ================================================================
+   PUBLIC API (exposed for debugging / integration)
+   ================================================================ */
+window.ArunaLink = {
+  CONFIG: CONFIG,
+  API_CONFIG: API_CONFIG,
+  state: state,
+  handleFileSelect: handleFileSelect,
+  handleDrop: handleDrop,
+  handlePaste: handlePaste,
+  validateFile: validateFile,
+  validateFiles: validateFiles,
+  uploadFile: uploadFile,
+  uploadFiles: uploadFiles,
+  cancelUpload: cancelUpload,
+  retryUpload: retryUpload,
+  removeUpload: removeUpload,
+  createFormData: createFormData,
+  showUploadProgress: showUploadProgress,
+  handleUploadSuccess: handleUploadSuccess,
+  handleUploadError: handleUploadError,
+  copyLink: copyLink,
+  shareFile: shareFile,
+  openFile: openFile,
+  downloadFile: downloadFile,
+  deleteFile: deleteFile,
+  renderPreview: renderPreview,
+  renderFileIcon: renderFileIcon,
+  renderUploadHistory: renderUploadHistory,
+  searchFiles: searchFiles,
+  filterFiles: filterFiles,
+  sortFiles: sortFiles,
+  clearHistory: clearHistory,
+  showToast: showToast,
+  showModal: showModal,
+  closeModal: closeModal,
+  toggleTheme: toggleTheme
+};
+</script>
+
+</body>
+</html>
